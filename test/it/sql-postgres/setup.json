@@ -1,0 +1,10 @@
+{
+  "outputDir": "test/output",
+  "generate": {
+    "fromDataModel": {
+      "SQL": {
+        "Postgres": true
+      }
+    }
+  }
+}
