@@ -14,6 +14,7 @@ const isPrimaryKey = status => ['APK', 'NPK', 'FPK', 'PK'].includes(status)
 const isForeignKey = status =>
   ['FPK', 'FK', 'OFK'].includes(status) ||
   ['1', '0..1'].includes(normalizeRelationStatus(status).split(' : ')[1])
+const isUnique = status => ['U', 'OU'].includes(status)
 const isNotNull = status =>
   ['FK', 'NK', 'BK', 'U', 'M'].includes(status) ||
   ['1', '1..n'].includes(normalizeRelationStatus(status).split(' : ')[1])
@@ -38,6 +39,9 @@ const extractEntityCodeFromRef = ref => {
   entityCode = stripWrappers(/\[[^\]]*]\(#([^)]*)\)/, entityCode)
   return entityCode
 }
+
+const entityCodes = meta => Object.keys(meta.sections)
+  .filter(code => meta.sections[code].type === 'entity')
 
 const attributeCodes = (meta, entityCode) => Object.keys(meta.entityAttributes[entityCode] || {})
 
@@ -95,18 +99,27 @@ const columnDefs = (meta, entityCode) => {
     before.push(`${indent}id bigserial primary key`)
   }
   return before.concat(explicit, after)
+    .join(',\n')
 }
 
-const entityCodes = meta => Object.keys(meta.sections)
-  .filter(code => meta.sections[code].type === 'entity')
+const uniqueIndex = entityCode => attributeCode => {
+  const tableName = snakeCase(entityCode)
+  const columnName = snakeCase(attributeCode)
+  return `\ncreate unique index ui_${tableName}__${columnName} on ${tableName} (${columnName});`
+}
+
+const uniqueIndexes = (meta, entityCode) => attributeCodes(meta, entityCode)
+  .filter(attributeCode => isUnique(attributeDef(meta, entityCode, attributeCode).status))
+  .map(uniqueIndex(entityCode))
+  .join('')
 
 const createTable = meta => entityCode =>
   `-- Entity: ${meta.sections[entityCode].name}
 create table ${snakeCase(entityCode)}
 (
-${columnDefs(meta, entityCode)
-    .join(',\n')}
-);`
+${columnDefs(meta, entityCode)}
+);` +
+  `${uniqueIndexes(meta, entityCode)}`
 
 const generate = (meta, setup) => {
   console.log('Generating Postgres SQL...')

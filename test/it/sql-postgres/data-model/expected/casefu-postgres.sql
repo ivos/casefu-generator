@@ -8,6 +8,8 @@ create table person
     user_name text not null,
     email text
 );
+create unique index ui_person__user_name on person (user_name);
+create unique index ui_person__email on person (email);
 
 -- Entity: Multiple word default code
 create table multiple_word_default_code
