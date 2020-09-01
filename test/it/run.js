@@ -76,7 +76,7 @@ const processTest = (dir, testedFn) => {
           console.log(message)
           fs.writeFileSync(path.join(expectedDir, file), actualContent)
         } else {
-          const diff = Diff.diffChars(expectedContent, actualContent)
+          const diff = Diff.diffWords(expectedContent, actualContent)
           message = chalk.redBright(`Assertion failed for test case ${dir}, file ${file}:\n`)
           diff.forEach(function (part) {
             const color = part.added ? 'green' : part.removed ? 'red' : 'grey'
@@ -90,7 +90,7 @@ const processTest = (dir, testedFn) => {
   })
   if (!equal(expectedFiles, actualFiles)) {
     message = chalk.redBright(`Assertion failed for test case ${dir}, file names:\n`)
-    const diff = Diff.diffArrays(expectedFiles, actualFiles)
+    const diff = Diff.diffWords(expectedFiles, actualFiles)
     diff.forEach(item => {
       const color = item.added ? 'green' : item.removed ? 'red' : 'grey'
       message += chalk[color](item.value)

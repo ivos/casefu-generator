@@ -7,10 +7,14 @@ const generate = (meta, setup) => {
   if (!fs.existsSync(setup.outputDir)) {
     fs.mkdirSync(setup.outputDir, { recursive: true })
   }
-  if (setup.generate) {
-    if (setup.generate.fromDataModel) {
-      if (setup.generate.fromDataModel.SQL) {
-        if (setup.generate.fromDataModel.SQL.Postgres === true) {
+  const { generate } = setup
+  if (generate) {
+    const { fromDataModel } = generate
+    if (fromDataModel) {
+      const { SQL } = fromDataModel
+      if (SQL) {
+        const { Postgres } = SQL
+        if (Postgres === true) {
           postgres.generate(meta, setup)
         }
       }
