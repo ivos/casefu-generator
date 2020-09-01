@@ -102,6 +102,22 @@ const columnDefs = (meta, entityCode) => {
     .join(',\n')
 }
 
+const fkConstraint = (meta, entityCode) => attributeCode => {
+  const tableName = snakeCase(entityCode)
+  const columnName = snakeCase(attributeCode)
+  const attDef = attributeDef(meta, entityCode, attributeCode)
+  const type = attDef.dataType || 'text'
+  const referredEntityCode = extractEntityCodeFromRef(type)
+  const referredTableName = snakeCase(referredEntityCode)
+  return `\nalter table ${tableName}\n${indent}add constraint fk_${tableName}__${columnName}` +
+    ` foreign key (${columnName}) references ${referredTableName} on delete cascade;`
+}
+
+const fkConstraints = (meta, entityCode) => attributeCodes(meta, entityCode)
+  .filter(attributeCode => isForeignKey(attributeDef(meta, entityCode, attributeCode).status || ''))
+  .map(fkConstraint(meta, entityCode))
+  .join('')
+
 const uniqueIndex = entityCode => attributeCode => {
   const tableName = snakeCase(entityCode)
   const columnName = snakeCase(attributeCode)
@@ -119,6 +135,7 @@ create table ${snakeCase(entityCode)}
 (
 ${columnDefs(meta, entityCode)}
 );` +
+  `${fkConstraints(meta, entityCode)}` +
   `${uniqueIndexes(meta, entityCode)}`
 
 const generate = (meta, setup) => {
