@@ -18,6 +18,7 @@
   "homepage": "https://casefu.com/",
   "dependencies": {
     "chalk": "2.4.2",
+    "pluralize": "^8.0.0",
     "snake-case": " 3.0.3"
   },
   "devDependencies": {

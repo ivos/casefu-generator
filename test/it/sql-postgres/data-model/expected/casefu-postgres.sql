@@ -2,8 +2,8 @@
 ---------
 
 -- Entity: Person
-create type person__sex as enum ('male', 'female');
-create table person
+create type people__sex as enum ('male', 'female');
+create table people
 (
     id bigserial primary key,
     personal_number text not null,
@@ -11,13 +11,13 @@ create table person
     given_names varchar(30),
     user_name text not null,
     email text,
-    sex person__sex
+    sex people__sex
 );
-create unique index ui_person__user_name on person (user_name);
-create unique index ui_person__email on person (email);
+create unique index ui_people__user_name on people (user_name);
+create unique index ui_people__email on people (email);
 
 -- Entity: Multiple word default code
-create table multiple_word_default_code
+create table multiple_word_default_codes
 (
     natural_primary_key text primary key,
     description text,
@@ -25,14 +25,14 @@ create table multiple_word_default_code
 );
 
 -- Entity: Explicit code
-create table some_explicit_code
+create table some_explicit_codes
 (
     foreign_primary_key bigint primary key,
     description text
 );
 
 -- Entity: Plain PK
-create table plain_pk
+create table plain_pks
 (
     primary_key bigint primary key,
     business_key text not null,
@@ -41,25 +41,25 @@ create table plain_pk
 );
 
 -- Entity: Location
-create table location
+create table locations
 (
     id bigserial primary key,
     name text
 );
 
 -- Entity: Empty
-create table empty
+create table empties
 (
     id bigserial primary key
 );
 
 -- Entity: Event
-create type event__status as enum ('active', 'preApproved', 'disabled', 'multi_word');
-create table event
+create type events__status as enum ('active', 'preApproved', 'disabled', 'multi_word');
+create table events
 (
     id bigserial primary key,
     time timestamp not null,
-    status event__status not null,
+    status events__status not null,
     location bigint not null,
     one_to_one bigint not null,
     one_to_one_empty bigint
@@ -69,15 +69,15 @@ create table event
 -- Foreign keys
 ---------------
 
-alter table multiple_word_default_code
-    add constraint fk_multiple_word_default_code__person foreign key (person) references person on delete cascade;
-alter table some_explicit_code
-    add constraint fk_some_explicit_code__foreign_primary_key foreign key (foreign_primary_key) references person on delete cascade;
-alter table plain_pk
-    add constraint fk_plain_pk__maybe_person foreign key (maybe_person) references person on delete cascade;
-alter table event
-    add constraint fk_event__location foreign key (location) references location on delete cascade;
-alter table event
-    add constraint fk_event__one_to_one foreign key (one_to_one) references some_explicit_code on delete cascade;
-alter table event
-    add constraint fk_event__one_to_one_empty foreign key (one_to_one_empty) references empty on delete cascade;
+alter table multiple_word_default_codes
+    add constraint fk_multiple_word_default_codes__person foreign key (person) references people on delete cascade;
+alter table some_explicit_codes
+    add constraint fk_some_explicit_codes__foreign_primary_key foreign key (foreign_primary_key) references people on delete cascade;
+alter table plain_pks
+    add constraint fk_plain_pks__maybe_person foreign key (maybe_person) references people on delete cascade;
+alter table events
+    add constraint fk_events__location foreign key (location) references locations on delete cascade;
+alter table events
+    add constraint fk_events__one_to_one foreign key (one_to_one) references some_explicit_codes on delete cascade;
+alter table events
+    add constraint fk_events__one_to_one_empty foreign key (one_to_one_empty) references empties on delete cascade;

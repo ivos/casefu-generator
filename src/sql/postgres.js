@@ -1,6 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 const { snakeCase } = require('snake-case')
+const pluralize = require('pluralize')
 
 const indent = '    '
 const enumPrefix = 'enum: '
@@ -22,7 +23,7 @@ const isNotNull = status =>
 const isMany = status => ['n', '1..n'].includes(normalizeRelationStatus(status).split(' : ')[1])
 const isEnum = type => type.indexOf(enumPrefix) === 0
 
-const getTableName = entityCode => snakeCase(entityCode)
+const getTableName = entityCode => snakeCase(pluralize(entityCode))
 const getColumnName = attributeCode => snakeCase(attributeCode)
 const getEnumTypeName = (entityCode, attributeCode) => `${getTableName(entityCode)}__${getColumnName(attributeCode)}`
 
