@@ -57,6 +57,7 @@ const processTest = (dir, testedFn) => {
   console.log(chalk.inverse('Processing test case') + ` ${dir}`)
   const meta = JSON.parse(fs.readFileSync(path.join(dir, 'meta.json'), encoding))
   const setup = JSON.parse(fs.readFileSync(path.join(dir, 'setup.json'), encoding))
+  fs.rmdirSync(setup.outputDir, { recursive: true })
   testedFn(meta, setup)
 
   const expectedDir = path.join(dir, 'expected')

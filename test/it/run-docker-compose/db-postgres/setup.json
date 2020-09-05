@@ -1,0 +1,6 @@
+{
+  "outputDir": "test/output",
+  "run": {
+    "database": "Postgres"
+  }
+}
