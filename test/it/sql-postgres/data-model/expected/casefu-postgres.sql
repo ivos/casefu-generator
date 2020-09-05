@@ -1,3 +1,6 @@
+-- Tables
+---------
+
 -- Entity: Person
 create table person
 (
@@ -18,8 +21,6 @@ create table multiple_word_default_code
     description text,
     person bigint not null
 );
-alter table multiple_word_default_code
-    add constraint fk_multiple_word_default_code__person foreign key (person) references person on delete cascade;
 
 -- Entity: Explicit code
 create table some_explicit_code
@@ -27,8 +28,6 @@ create table some_explicit_code
     foreign_primary_key bigint primary key,
     description text
 );
-alter table some_explicit_code
-    add constraint fk_some_explicit_code__foreign_primary_key foreign key (foreign_primary_key) references person on delete cascade;
 
 -- Entity: Plain PK
 create table plain_pk
@@ -38,8 +37,6 @@ create table plain_pk
     description text,
     maybe_person bigint
 );
-alter table plain_pk
-    add constraint fk_plain_pk__maybe_person foreign key (maybe_person) references person on delete cascade;
 
 -- Entity: Location
 create table location
@@ -63,6 +60,17 @@ create table event
     one_to_one bigint not null,
     one_to_one_empty bigint
 );
+
+
+-- Foreign keys
+---------------
+
+alter table multiple_word_default_code
+    add constraint fk_multiple_word_default_code__person foreign key (person) references person on delete cascade;
+alter table some_explicit_code
+    add constraint fk_some_explicit_code__foreign_primary_key foreign key (foreign_primary_key) references person on delete cascade;
+alter table plain_pk
+    add constraint fk_plain_pk__maybe_person foreign key (maybe_person) references person on delete cascade;
 alter table event
     add constraint fk_event__location foreign key (location) references location on delete cascade;
 alter table event

@@ -113,7 +113,7 @@ const fkConstraint = (meta, entityCode) => attributeCode => {
     ` foreign key (${columnName}) references ${referredTableName} on delete cascade;`
 }
 
-const fkConstraints = (meta, entityCode) => attributeCodes(meta, entityCode)
+const fkConstraints = meta => entityCode => attributeCodes(meta, entityCode)
   .filter(attributeCode => isForeignKey(attributeDef(meta, entityCode, attributeCode).status || ''))
   .map(fkConstraint(meta, entityCode))
   .join('')
@@ -135,16 +135,30 @@ create table ${snakeCase(entityCode)}
 (
 ${columnDefs(meta, entityCode)}
 );` +
-  `${fkConstraints(meta, entityCode)}` +
   `${uniqueIndexes(meta, entityCode)}`
 
 const generate = (meta, setup) => {
   console.log('Generating Postgres SQL...')
-  const content =
+  const tables =
     entityCodes(meta)
       .map(createTable(meta))
       .join('\n\n') +
     '\n'
+  const foreignKeys =
+    entityCodes(meta)
+      .map(fkConstraints(meta))
+      .filter(v => v !== '')
+      .join('') +
+    '\n'
+  const content =
+    `-- Tables
+---------
+
+${tables}
+
+-- Foreign keys
+---------------
+${foreignKeys}`
   fs.writeFileSync(path.join(setup.outputDir, 'casefu-postgres.sql'), content)
 }
 
