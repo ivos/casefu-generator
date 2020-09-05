@@ -3,6 +3,7 @@ const path = require('path')
 const { snakeCase } = require('snake-case')
 
 const indent = '    '
+const enumPrefix = 'enum: '
 
 const normalizeRelationStatus = status =>
   status
@@ -19,6 +20,11 @@ const isNotNull = status =>
   ['FK', 'NK', 'BK', 'U', 'M'].includes(status) ||
   ['1', '1..n'].includes(normalizeRelationStatus(status).split(' : ')[1])
 const isMany = status => ['n', '1..n'].includes(normalizeRelationStatus(status).split(' : ')[1])
+const isEnum = type => type.indexOf(enumPrefix) === 0
+
+const getTableName = entityCode => snakeCase(entityCode)
+const getColumnName = attributeCode => snakeCase(attributeCode)
+const getEnumTypeName = (entityCode, attributeCode) => `${getTableName(entityCode)}__${getColumnName(attributeCode)}`
 
 const pkToFkConversions = {
   serial: 'integer',
@@ -77,6 +83,9 @@ const columnType = (meta, entityCode, attributeCode) => {
     const referredEntityCode = extractEntityCodeFromRef(type)
     type = getPKDataTypeForFK(meta, referredEntityCode)
   }
+  if (isEnum(type)) {
+    type = `${getEnumTypeName(entityCode, attributeCode)}`
+  }
   if (isPrimaryKey(status)) {
     return `${type} primary key`
   }
@@ -87,7 +96,7 @@ const columnType = (meta, entityCode, attributeCode) => {
 }
 
 const columnDef = (meta, entityCode) => attributeCode =>
-  `${indent}${snakeCase(attributeCode)} ${columnType(meta, entityCode, attributeCode)}`
+  `${indent}${getColumnName(attributeCode)} ${columnType(meta, entityCode, attributeCode)}`
 
 const columnDefs = (meta, entityCode) => {
   const explicit = attributeCodes(meta, entityCode)
@@ -103,12 +112,12 @@ const columnDefs = (meta, entityCode) => {
 }
 
 const fkConstraint = (meta, entityCode) => attributeCode => {
-  const tableName = snakeCase(entityCode)
-  const columnName = snakeCase(attributeCode)
+  const tableName = getTableName(entityCode)
+  const columnName = getColumnName(attributeCode)
   const attDef = attributeDef(meta, entityCode, attributeCode)
   const type = attDef.dataType || 'text'
   const referredEntityCode = extractEntityCodeFromRef(type)
-  const referredTableName = snakeCase(referredEntityCode)
+  const referredTableName = getTableName(referredEntityCode)
   return `\nalter table ${tableName}\n${indent}add constraint fk_${tableName}__${columnName}` +
     ` foreign key (${columnName}) references ${referredTableName} on delete cascade;`
 }
@@ -119,8 +128,8 @@ const fkConstraints = meta => entityCode => attributeCodes(meta, entityCode)
   .join('')
 
 const uniqueIndex = entityCode => attributeCode => {
-  const tableName = snakeCase(entityCode)
-  const columnName = snakeCase(attributeCode)
+  const tableName = getTableName(entityCode)
+  const columnName = getColumnName(attributeCode)
   return `\ncreate unique index ui_${tableName}__${columnName} on ${tableName} (${columnName});`
 }
 
@@ -129,9 +138,26 @@ const uniqueIndexes = (meta, entityCode) => attributeCodes(meta, entityCode)
   .map(uniqueIndex(entityCode))
   .join('')
 
+const enumType = (meta, entityCode) => attributeCode => {
+  const enumTypeName = getEnumTypeName(entityCode, attributeCode)
+  const attDef = attributeDef(meta, entityCode, attributeCode)
+  const enumValues = attDef.dataType.trim().substring(enumPrefix.length)
+    .split(',')
+    .map(s => s.trim())
+    .map(s => s.replace(/\s+/g, '_'))
+    .map(s => `'${s}'`)
+    .join(', ')
+  return `\ncreate type ${enumTypeName} as enum (${enumValues});`
+}
+
+const enumTypes = (meta, entityCode) => attributeCodes(meta, entityCode)
+  .filter(attributeCode => isEnum(attributeDef(meta, entityCode, attributeCode).dataType))
+  .map(enumType(meta, entityCode))
+  .join('')
+
 const createTable = meta => entityCode =>
-  `-- Entity: ${meta.sections[entityCode].name}
-create table ${snakeCase(entityCode)}
+  `-- Entity: ${meta.sections[entityCode].name}${enumTypes(meta, entityCode)}
+create table ${getTableName(entityCode)}
 (
 ${columnDefs(meta, entityCode)}
 );` +

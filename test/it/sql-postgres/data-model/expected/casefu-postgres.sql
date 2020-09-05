@@ -2,6 +2,7 @@
 ---------
 
 -- Entity: Person
+create type person__sex as enum ('male', 'female');
 create table person
 (
     id bigserial primary key,
@@ -9,7 +10,8 @@ create table person
     family_name text not null,
     given_names varchar(30),
     user_name text not null,
-    email text
+    email text,
+    sex person__sex
 );
 create unique index ui_person__user_name on person (user_name);
 create unique index ui_person__email on person (email);
@@ -52,10 +54,12 @@ create table empty
 );
 
 -- Entity: Event
+create type event__status as enum ('active', 'preApproved', 'disabled', 'multi_word');
 create table event
 (
     id bigserial primary key,
     time timestamp not null,
+    status event__status not null,
     location bigint not null,
     one_to_one bigint not null,
     one_to_one_empty bigint
