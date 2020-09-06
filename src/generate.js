@@ -10,20 +10,14 @@ const generate = (meta, setup) => {
   }
   const { generate } = setup
   if (generate) {
-    const { fromDataModel } = generate
-    if (fromDataModel) {
-      const { SQL } = fromDataModel
-      if (SQL) {
-        const { Postgres } = SQL
-        if (Postgres === true) {
-          postgres.generate(meta, setup)
-        }
-      }
+    const { database } = generate
+    if (database === 'Postgres') {
+      postgres.generateCreateTables(meta, setup)
+      postgres.generateDockerfile(setup)
     }
-  }
-  if (setup.run) {
     dockerCompose.generate(setup)
   }
+  console.log('Generating finished successfully.')
 }
 
 module.exports = {

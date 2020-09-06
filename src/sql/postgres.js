@@ -164,8 +164,8 @@ ${columnDefs(meta, entityCode)}
 );` +
   `${uniqueIndexes(meta, entityCode)}`
 
-const generate = (meta, setup) => {
-  console.log('Generating Postgres SQL...')
+const generateCreateTables = (meta, setup) => {
+  console.log('- Generating Postgres "create-tables.sql"')
   const tables =
     entityCodes(meta)
       .map(createTable(meta))
@@ -186,7 +186,20 @@ ${tables}
 -- Foreign keys
 ---------------
 ${foreignKeys}`
-  fs.writeFileSync(path.join(setup.outputDir, 'casefu-postgres.sql'), content)
+  const dir = path.join(setup.outputDir, 'postgres')
+  fs.mkdirSync(dir, { recursive: true })
+  fs.writeFileSync(path.join(dir, 'create-tables.sql'), content)
 }
 
-module.exports = { generate }
+const generateDockerfile = setup => {
+  console.log('- Generating Postgres "Dockerfile"')
+  const content = `FROM postgres
+COPY create-tables.sql /docker-entrypoint-initdb.d/
+`
+  fs.writeFileSync(path.join(setup.outputDir, 'postgres', 'Dockerfile'), content)
+}
+
+module.exports = {
+  generateCreateTables,
+  generateDockerfile
+}

@@ -1,6 +1,6 @@
 {
   "outputDir": "test/output",
-  "run": {
+  "generate": {
     "database": "Postgres"
   }
 }

@@ -2,8 +2,8 @@ const fs = require('fs')
 const path = require('path')
 
 const postgresServices = () => `
-  postgres:
-    image: postgres
+  database:
+    build: ./postgres
     restart: always
     volumes:
       - db_data:/var/lib/postgresql/data
@@ -15,11 +15,11 @@ const postgresVolumes = () => `
   db_data:`
 
 const generate = (setup) => {
-  console.log('Generating Docker Compose file...')
+  console.log('- Generating Docker Compose "docker-compose.yaml"')
   let services = ''
   let volumes = ''
-  const { run } = setup
-  const { database } = run
+  const { generate } = setup
+  const { database } = generate
   if (database === 'Postgres') {
     services += postgresServices()
     volumes += postgresVolumes()

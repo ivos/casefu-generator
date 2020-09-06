@@ -1,4 +1,4 @@
 {
   "outputDir": "test/output",
-  "run": {}
+  "generate": {}
 }

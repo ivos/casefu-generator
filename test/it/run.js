@@ -41,7 +41,7 @@ const listFiles = (baseDir, dir) => {
 const processDir = (baseDir, testedFn) => {
   const files = listFiles(baseDir, '')
   files.forEach(file => {
-    if (file.endsWith('/meta.json')) {
+    if (path.basename(file) === 'setup.json') {
       processTest(path.join(baseDir, path.dirname(file)), testedFn)
     }
   })
@@ -91,7 +91,7 @@ const processTest = (dir, testedFn) => {
   })
   if (!equal(expectedFiles, actualFiles)) {
     message = chalk.redBright(`Assertion failed for test case ${dir}, file names:\n`)
-    const diff = Diff.diffWords(expectedFiles, actualFiles)
+    const diff = Diff.diffArrays(expectedFiles, actualFiles)
     diff.forEach(item => {
       const color = item.added ? 'green' : item.removed ? 'red' : 'grey'
       message += chalk[color](item.value)
