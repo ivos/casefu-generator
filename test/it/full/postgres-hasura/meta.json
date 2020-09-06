@@ -1,0 +1,104 @@
+{
+  "sections": {
+    "Person": {
+      "type": "entity",
+      "name": "Person"
+    },
+    "Location": {
+      "type": "entity",
+      "name": "Location"
+    },
+    "Event": {
+      "type": "entity",
+      "name": "Event"
+    }
+  },
+  "references": {
+    "Event": [
+      "Person",
+      "Location"
+    ]
+  },
+  "attributeToEntity": {
+    "Person.id": "Person",
+    "Person.personalNumber": "Person",
+    "Person.familyName": "Person",
+    "Person.givenNames": "Person",
+    "Person.userName": "Person",
+    "Person.email": "Person",
+    "Person.sex": "Person",
+    "Location.name": "Location",
+    "Event.time": "Event",
+    "Event.status": "Event",
+    "Event.persons": "Event",
+    "Event.location": "Event",
+    "Event.otherVariants": "Event",
+    "Event.oneToOne": "Event",
+    "Event.oneToOneEmpty": "Event"
+  },
+  "entityAttributes": {
+    "Person": {
+      "id": {
+        "status": "APK",
+        "dataType": "bigserial"
+      },
+      "personalNumber": {
+        "status": "NK",
+        "dataType": "text"
+      },
+      "familyName": {
+        "status": "M",
+        "dataType": "text"
+      },
+      "givenNames": {
+        "status": "O",
+        "dataType": "varchar(30)"
+      },
+      "userName": {
+        "status": "U",
+        "dataType": "text"
+      },
+      "email": {
+        "status": "OU",
+        "dataType": "text"
+      },
+      "sex": {
+        "status": "O",
+        "dataType": "enum: male, female"
+      }
+    },
+    "Location": {
+      "name": {
+        "status": null,
+        "dataType": ""
+      }
+    },
+    "Event": {
+      "time": {
+        "status": "M",
+        "dataType": "timestamp"
+      },
+      "status": {
+        "status": "M",
+        "dataType": "enum: active, disabled"
+      },
+      "persons": {
+        "status": "1 : n",
+        "dataType": "`#Person`"
+      },
+      "location": {
+        "status": "n : 1",
+        "dataType": "`#Location`"
+      }
+    }
+  },
+  "errors": [],
+  "backReferences": {
+    "Person": [
+      "Event"
+    ],
+    "Location": [
+      "Event"
+    ]
+  }
+}

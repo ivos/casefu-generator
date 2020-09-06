@@ -1,7 +1,7 @@
 const fs = require('fs')
 const { inspect } = require('util')
-const postgres = require('./sql/postgres')
-const dockerCompose = require('./run/docker-compose')
+const postgres = require('./database/postgres')
+const dockerCompose = require('./docker-compose/docker-compose')
 
 const generate = (meta, setup) => {
   console.log('Generating for setup:', inspect(setup, { depth: null }))
