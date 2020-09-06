@@ -19,16 +19,18 @@ const generate = (setup) => {
   let services = ''
   let volumes = ''
   const { generate } = setup
-  const { database } = generate
-  if (database === 'Postgres') {
-    services += postgresServices()
-    volumes += postgresVolumes()
-  }
-  if (services) {
-    services = '\nservices:' + services
-  }
-  if (volumes) {
-    volumes = '\nvolumes:' + volumes
+  if (generate) {
+    const { database } = generate
+    if (database === 'Postgres') {
+      services += postgresServices()
+      volumes += postgresVolumes()
+    }
+    if (services) {
+      services = '\nservices:' + services
+    }
+    if (volumes) {
+      volumes = '\nvolumes:' + volumes
+    }
   }
   const content = `version: '3.6'${services}${volumes}
 `
