@@ -20,9 +20,14 @@ const hasuraServices = () => `
     depends_on:
       - database
     restart: always
-    network_mode: host
+    network_mode: host # Linux only!
+    ports:
+      - "8000:8000"
     environment:
-      HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:postgres@localhost:5432/postgres
+      HASURA_GRAPHQL_SERVER_PORT: 8000
+      HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:postgres@localhost:5432/postgres # Linux
+      # HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:postgres@host.docker.internal:5432/postgres # Mac
+      # HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:postgres@docker.for.win.localhost:5432/postgres # Windows
       HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
       HASURA_GRAPHQL_DEV_MODE: "true"
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log`
