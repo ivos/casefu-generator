@@ -199,7 +199,11 @@ COPY create-tables.sql /docker-entrypoint-initdb.d/
   fs.writeFileSync(path.join(setup.outputDir, 'postgres', 'Dockerfile'), content)
 }
 
+const generatePostgres = (meta, setup) => {
+  generateCreateTables(meta, setup)
+  generateDockerfile(setup)
+}
+
 module.exports = {
-  generateCreateTables,
-  generateDockerfile
+  generatePostgres
 }

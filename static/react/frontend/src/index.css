@@ -1,0 +1,10 @@
+code {
+  background-color: #f4f4f4;
+  padding: 0.1rem 0.4rem;
+  border-radius: 5px;
+}
+
+.app-required {
+  color: red;
+  font-weight: bold;
+}

@@ -32,19 +32,29 @@ const hasuraServices = () => `
       HASURA_GRAPHQL_DEV_MODE: "true"
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log`
 
+const frontendServices = () => `
+  frontend:
+    build: ./frontend
+    restart: always
+    ports:
+      - "3000:80"`
+
 const generate = (setup) => {
   console.log('- Generating Docker Compose "docker-compose.yaml"')
   let services = ''
   let volumes = ''
   const { generate } = setup
   if (generate) {
-    const { database, backend } = generate
+    const { database, backend, frontend } = generate
     if (database === 'Postgres') {
       services += postgresServices()
       volumes += postgresVolumes()
     }
     if (backend === 'Hasura') {
       services += hasuraServices()
+    }
+    if (frontend) {
+      services += frontendServices()
     }
     if (services) {
       services = '\nservices:' + services

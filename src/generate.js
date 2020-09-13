@@ -1,6 +1,7 @@
 const fs = require('fs')
 const { inspect } = require('util')
-const postgres = require('./database/postgres')
+const { generatePostgres } = require('./database/postgres')
+const { generateReact } = require('./frontend/react')
 const dockerCompose = require('./docker-compose/docker-compose')
 
 const generate = (meta, setup) => {
@@ -13,10 +14,12 @@ const generate = (meta, setup) => {
   }
   const { generate } = setup
   if (generate) {
-    const { database } = generate
+    const { database, frontend } = generate
     if (database === 'Postgres') {
-      postgres.generateCreateTables(meta, setup)
-      postgres.generateDockerfile(setup)
+      generatePostgres(meta, setup)
+    }
+    if (frontend === 'React') {
+      generateReact(meta, setup)
     }
   }
   dockerCompose.generate(setup)
