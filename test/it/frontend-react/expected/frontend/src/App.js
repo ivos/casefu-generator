@@ -4,15 +4,23 @@ import { Container } from 'react-bootstrap'
 import './App.css'
 import Header from './layout/Header'
 import Home from './layout/Home'
-import CustomersList from './app/customers/CustomersList'
+import CustomerRouter from './app/customer/CustomerRouter'
+import OrderRouter from './app/order/OrderRouter'
+import BranchRouter from './app/branch/BranchRouter'
 
-export default () => (
+export default () =>
   <Router>
     <Header/>
     <Container id="app-container" fluid>
       <Switch>
         <Route path="/customers">
-          <CustomersList/>
+          <CustomerRouter/>
+        </Route>
+        <Route path="/orders">
+          <OrderRouter/>
+        </Route>
+        <Route path="/branches">
+          <BranchRouter/>
         </Route>
         <Route path="/">
           <Home/>
@@ -20,4 +28,3 @@ export default () => (
       </Switch>
     </Container>
   </Router>
-)

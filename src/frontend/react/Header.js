@@ -4,12 +4,11 @@ const { paramCase, sentenceCase } = require('change-case')
 const pluralize = require('pluralize')
 const { entityCodes } = require('../../meta/entity')
 
-const generateHeader = (meta, setup) => {
+const generateHeaderJs = (meta, setup) => {
   console.log('- Generating React Header.js')
 
   const navItem = (url, label) => `
           <NavDropdown.Item as={NavLink} to="/${url}">${label}</NavDropdown.Item>`
-
   const navItems = entityCodes(meta)
     .map(entityCode => ({
       url: paramCase(pluralize(entityCode)),
@@ -41,5 +40,5 @@ export default () =>
 }
 
 module.exports = {
-  generateHeader
+  generateHeaderJs
 }
