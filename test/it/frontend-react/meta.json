@@ -1,4 +1,5 @@
 {
+  "systemName": "Some system name",
   "sections": {
     "Customer": {
       "type": "entity",

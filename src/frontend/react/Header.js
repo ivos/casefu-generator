@@ -5,7 +5,7 @@ const pluralize = require('pluralize')
 const { entityCodes } = require('../../meta/entity')
 
 const generateHeaderJs = (meta, setup) => {
-  console.log('- Generating React Header.js')
+  console.log('- Generating React "Header.js"')
 
   const navItem = (url, label) => `
           <NavDropdown.Item as={NavLink} to="/${url}">${label}</NavDropdown.Item>`

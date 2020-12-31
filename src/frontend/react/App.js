@@ -5,7 +5,7 @@ const pluralize = require('pluralize')
 const { entityCodes } = require('../../meta/entity')
 
 const generateAppJs = (meta, setup) => {
-  console.log('- Generating React App.js')
+  console.log('- Generating React "App.js"')
 
   const importFn = ({ entityCode, pkg }) => `
 import ${entityCode}Router from './app/${pkg}/${entityCode}Router'`
