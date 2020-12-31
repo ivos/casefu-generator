@@ -1,7 +1,8 @@
 const fse = require('fs-extra')
 const path = require('path')
+const { generateHeader } = require('./Header')
 
-const copyStaticContent = (setup) => {
+const copyStaticContent = setup => {
   console.log('- Copying React static content')
   const dir = setup.outputDir
   fse.ensureDirSync(dir)
@@ -10,6 +11,7 @@ const copyStaticContent = (setup) => {
 
 const generateReact = (meta, setup) => {
   copyStaticContent(setup)
+  generateHeader(meta, setup)
 }
 
 module.exports = {

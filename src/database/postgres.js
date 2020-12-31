@@ -1,27 +1,24 @@
 const fs = require('fs')
 const path = require('path')
-const { snakeCase } = require('snake-case')
+const { snakeCase } = require('change-case')
 const pluralize = require('pluralize')
+const {
+  entityCodes,
+  attributeCodes,
+  attributeDef,
+  hasPrimaryKey,
+  isPrimaryKey,
+  isForeignKey,
+  isUnique,
+  isNotNull,
+  isToMany,
+  isEnum,
+  extractEntityCodeFromRef,
+  enumValues,
+  getExplicitPKAttDef
+} = require('../meta/entity')
 
 const indent = '    '
-const enumPrefix = 'enum: '
-
-const normalizeRelationStatus = status =>
-  status
-    .toLowerCase()
-    .replace(/[m*]/g, 'n')
-    .replace(/0..n/g, 'n')
-    .replace(/1..1/g, '1')
-const isPrimaryKey = status => ['APK', 'NPK', 'FPK', 'PK'].includes(status)
-const isForeignKey = status =>
-  ['FPK', 'FK', 'OFK'].includes(status) ||
-  ['1', '0..1'].includes(normalizeRelationStatus(status).split(' : ')[1])
-const isUnique = status => ['U', 'OU'].includes(status)
-const isNotNull = status =>
-  ['FK', 'NK', 'BK', 'U', 'M'].includes(status) ||
-  ['1', '1..n'].includes(normalizeRelationStatus(status).split(' : ')[1])
-const isMany = status => ['n', '1..n'].includes(normalizeRelationStatus(status).split(' : ')[1])
-const isEnum = type => type.indexOf(enumPrefix) === 0
 
 const getTableName = entityCode => snakeCase(pluralize(entityCode))
 const getColumnName = attributeCode => snakeCase(attributeCode)
@@ -32,40 +29,10 @@ const pkToFkConversions = {
   bigserial: 'bigint'
 }
 
-const stripWrappers = (wrapper, text) => {
-  let matches = text.match(wrapper)
-  while (matches) {
-    text = matches[1].trim()
-    matches = text.match(wrapper)
-  }
-  return text
-}
-
-const extractEntityCodeFromRef = ref => {
-  let entityCode = stripWrappers(/`#([^`]*)`/, ref)
-  entityCode = stripWrappers(/\[[^\]]*]\(#([^)]*)\)/, entityCode)
-  return entityCode
-}
-
-const entityCodes = meta => Object.keys(meta.sections)
-  .filter(code => meta.sections[code].type === 'entity')
-
-const attributeCodes = (meta, entityCode) => Object.keys(meta.entityAttributes[entityCode] || {})
-
-const attributeDef = (meta, entityCode, attributeCode) => meta.entityAttributes[entityCode][attributeCode]
-
-const hasPrimaryKey = (meta, entityCode) =>
-  attributeCodes(meta, entityCode)
-    .map(attributeCode => attributeDef(meta, entityCode, attributeCode).status)
-    .filter(isPrimaryKey)
-    .length > 0
-
 const getPKDataTypeForFK = (meta, entityCode) => {
-  const explicitPKAttDefs = attributeCodes(meta, entityCode)
-    .map(attributeCode => ({ attributeCode, attDef: attributeDef(meta, entityCode, attributeCode) }))
-    .filter(({ attDef }) => isPrimaryKey(attDef.status))
-  if (explicitPKAttDefs.length > 0) {
-    const explicitPkType = explicitPKAttDefs[0].attDef.dataType
+  const explicitPKAttDef = getExplicitPKAttDef(meta, entityCode)
+  if (explicitPKAttDef) {
+    const explicitPkType = explicitPKAttDef.dataType
     const referredEntityCode = extractEntityCodeFromRef(explicitPkType)
     if (referredEntityCode !== explicitPkType) {
       return getPKDataTypeForFK(meta, referredEntityCode)
@@ -101,7 +68,7 @@ const columnDef = (meta, entityCode) => attributeCode =>
 
 const columnDefs = (meta, entityCode) => {
   const explicit = attributeCodes(meta, entityCode)
-    .filter(attributeCode => !isMany(attributeDef(meta, entityCode, attributeCode).status || ''))
+    .filter(attributeCode => !isToMany(attributeDef(meta, entityCode, attributeCode).status || ''))
     .map(columnDef(meta, entityCode))
   const before = []
   const after = []
@@ -141,14 +108,10 @@ const uniqueIndexes = (meta, entityCode) => attributeCodes(meta, entityCode)
 
 const enumType = (meta, entityCode) => attributeCode => {
   const enumTypeName = getEnumTypeName(entityCode, attributeCode)
-  const attDef = attributeDef(meta, entityCode, attributeCode)
-  const enumValues = attDef.dataType.trim().substring(enumPrefix.length)
-    .split(',')
-    .map(s => s.trim())
-    .map(s => s.replace(/\s+/g, '_'))
+  const values = enumValues(meta, entityCode, attributeCode)
     .map(s => `'${s}'`)
     .join(', ')
-  return `\ncreate type ${enumTypeName} as enum (${enumValues});`
+  return `\ncreate type ${enumTypeName} as enum (${values});`
 }
 
 const enumTypes = (meta, entityCode) => attributeCodes(meta, entityCode)
