@@ -1,8 +1,7 @@
 const fs = require('fs')
 const path = require('path')
-const { paramCase } = require('change-case')
-const pluralize = require('pluralize')
 const { entityCodes } = require('../../meta/entity')
+const { pkg, url } = require('./shared')
 
 const generateAppJs = (meta, setup) => {
   console.log('- Generating React "App.js"')
@@ -12,7 +11,7 @@ import ${entityCode}Router from './app/${pkg}/${entityCode}Router'`
   const imports = entityCodes(meta)
     .map(entityCode => ({
       entityCode,
-      pkg: paramCase(entityCode)
+      pkg: pkg(entityCode)
     }))
     .map(importFn)
     .join('')
@@ -23,7 +22,7 @@ import ${entityCode}Router from './app/${pkg}/${entityCode}Router'`
         </Route>`
   const routes = entityCodes(meta)
     .map(entityCode => ({
-      url: paramCase(pluralize(entityCode)),
+      url: url(entityCode),
       entityCode
     }))
     .map(route)

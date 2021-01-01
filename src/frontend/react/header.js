@@ -1,20 +1,19 @@
 const fs = require('fs')
 const path = require('path')
-const { paramCase, sentenceCase } = require('change-case')
-const pluralize = require('pluralize')
 const { entityCodes } = require('../../meta/entity')
+const { url, labelPlural } = require('./shared')
 
 const generateHeaderJs = (meta, setup) => {
   console.log('- Generating React "Header.js"')
 
-  const navItem = (url, label) => `
+  const navItem = ({ url, label }) => `
           <NavDropdown.Item as={NavLink} to="/${url}">${label}</NavDropdown.Item>`
   const navItems = entityCodes(meta)
     .map(entityCode => ({
-      url: paramCase(pluralize(entityCode)),
-      label: sentenceCase(pluralize(entityCode))
+      url: url(entityCode),
+      label: labelPlural(entityCode)
     }))
-    .map(({ url, label }) => navItem(url, label))
+    .map(navItem)
     .join('')
 
   const content = `import React from 'react'
