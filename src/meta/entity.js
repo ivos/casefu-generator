@@ -12,11 +12,12 @@ const isToOne = ([_, { status }]) =>
   ['1', '0..1'].includes(normalizeRelationStatus(status).split(' : ')[1])
 const isUnique = ([_, { status }]) => ['U', 'OU'].includes(status)
 const isNotNull = ([_, { status }]) =>
-  ['FK', 'NK', 'BK', 'U', 'M'].includes(status) ||
+  ['FK', 'NK', 'BK', 'U', 'M', 'V', 'S'].includes(status) ||
   ['1', '1..n'].includes(normalizeRelationStatus(status).split(' : ')[1])
 const isToMany = ([_, { status }]) => ['n', '1..n'].includes(normalizeRelationStatus(status).split(' : ')[1])
 const isOwnAttribute = attributeEntry => !isToMany(attributeEntry)
 const isEnum = ([_, { dataType }]) => dataType && dataType.indexOf(enumPrefix) === 0
+const isStatus = ([_, { status }]) => status === 'S'
 const isDate = ([_, { dataType }]) => dataType && ['date'].includes(dataType.toLowerCase())
 const isDateTime = ([_, { dataType }]) => dataType && ['timestamp', 'datetime'].includes(dataType.toLowerCase())
 
@@ -83,9 +84,23 @@ const filterEnum = filterAttributes(isEnum)
 
 const hasAttribute = predicate => (meta, entityCode) =>
   filterAttributes(predicate)(meta, entityCode).length > 0
+const hasToOne = hasAttribute(isToOne)
 const hasEnum = hasAttribute(isEnum)
+const hasStatusEnum = hasAttribute(attributeEntry => isEnum(attributeEntry) && isStatus(attributeEntry))
 const hasDate = hasAttribute(isDate)
 const hasDateTime = hasAttribute(isDateTime)
+
+const toOneTargets = (meta, entityCode) => {
+  const arrays = entityCodes(meta)
+    .map(referringEntityCode =>
+      attributeEntries(meta, referringEntityCode)
+        .filter(isToOne)
+        .filter(([, { dataType }]) => extractEntityCodeFromRef(dataType) === entityCode)
+        .map(attributeEntry => [referringEntityCode, attributeEntry]))
+  return [].concat(...arrays)
+}
+
+const isToOneTarget = (meta, entityCode) => toOneTargets(meta, entityCode).length > 0
 
 module.exports = {
   entityCodes,
@@ -95,6 +110,7 @@ module.exports = {
   isUnique,
   isNotNull,
   isEnum,
+  isStatus,
   isDate,
   isDateTime,
   extractEntityCodeFromRef,
@@ -104,7 +120,11 @@ module.exports = {
   enumValues,
   filterToOne,
   filterEnum,
+  hasToOne,
   hasEnum,
+  hasStatusEnum,
   hasDate,
-  hasDateTime
+  hasDateTime,
+  toOneTargets,
+  isToOneTarget
 }

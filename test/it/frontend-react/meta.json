@@ -34,7 +34,7 @@
         "dataType": "text"
       },
       "status": {
-        "status": "M",
+        "status": "S",
         "dataType": "enum: active, disabled"
       }
     },
@@ -48,7 +48,7 @@
         "dataType": "`#Customer`"
       },
       "status": {
-        "status": "M",
+        "status": "S",
         "dataType": "enum: created, submitted, delivered"
       },
       "received": {
