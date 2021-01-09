@@ -20,6 +20,12 @@ export const numberMatch = (params, entity, name) =>
 export const caseInsensitiveMatch = (params, entity, name) =>
   !params[name] || (entity[name] && entity[name].toLowerCase().indexOf(params[name].toLowerCase()) === 0)
 
+export const atLeast = (params, paramName, entity, attributeName) =>
+  !params[paramName] || (entity[attributeName] >= params[paramName])
+
+export const atMost = (params, paramName, entity, attributeName) =>
+  !params[paramName] || (entity[attributeName] <= params[paramName])
+
 export const list = (params, pageSize, key, filterFn) => {
   const page = params.$page || 0
   return get()[key]

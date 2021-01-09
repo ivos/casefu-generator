@@ -32,16 +32,20 @@
       "name": {
         "status": "M",
         "dataType": "text"
+      },
+      "status": {
+        "status": "M",
+        "dataType": "enum: active, disabled"
       }
     },
     "Order": {
-      "number": {
+      "orderNumber": {
         "status": "NK",
         "dataType": "text"
       },
       "customer": {
         "status": "n : 1",
-        "dataType": "#Customer"
+        "dataType": "`#Customer`"
       },
       "status": {
         "status": "M",

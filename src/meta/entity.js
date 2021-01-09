@@ -1,21 +1,24 @@
 const enumPrefix = 'enum: '
 
 const normalizeRelationStatus = status =>
-  status
+  (status || '')
     .toLowerCase()
     .replace(/[m*]/g, 'n')
     .replace(/0..n/g, 'n')
     .replace(/1..1/g, '1')
-const isPrimaryKey = status => ['APK', 'NPK', 'FPK', 'PK'].includes(status)
-const isForeignKey = status =>
+const isPrimaryKey = ([_, { status }]) => ['APK', 'NPK', 'FPK', 'PK'].includes(status)
+const isToOne = ([_, { status }]) =>
   ['FPK', 'FK', 'OFK'].includes(status) ||
   ['1', '0..1'].includes(normalizeRelationStatus(status).split(' : ')[1])
-const isUnique = status => ['U', 'OU'].includes(status)
-const isNotNull = status =>
+const isUnique = ([_, { status }]) => ['U', 'OU'].includes(status)
+const isNotNull = ([_, { status }]) =>
   ['FK', 'NK', 'BK', 'U', 'M'].includes(status) ||
   ['1', '1..n'].includes(normalizeRelationStatus(status).split(' : ')[1])
-const isToMany = status => ['n', '1..n'].includes(normalizeRelationStatus(status).split(' : ')[1])
-const isEnum = type => type.indexOf(enumPrefix) === 0
+const isToMany = ([_, { status }]) => ['n', '1..n'].includes(normalizeRelationStatus(status).split(' : ')[1])
+const isOwnAttribute = attributeEntry => !isToMany(attributeEntry)
+const isEnum = ([_, { dataType }]) => dataType && dataType.indexOf(enumPrefix) === 0
+const isDate = ([_, { dataType }]) => dataType && ['date'].includes(dataType.toLowerCase())
+const isDateTime = ([_, { dataType }]) => dataType && ['timestamp', 'datetime'].includes(dataType.toLowerCase())
 
 const stripWrappers = (wrapper, text) => {
   let matches = text.match(wrapper)
@@ -35,43 +38,73 @@ const extractEntityCodeFromRef = ref => {
 const entityCodes = meta => Object.keys(meta.sections)
   .filter(code => meta.sections[code].type === 'entity')
 
-const attributeCodes = (meta, entityCode) => Object.keys(meta.entityAttributes[entityCode] || {})
+const attributeEntries = (meta, entityCode) => Object.entries(meta.entityAttributes[entityCode] || {})
 
-const attributeDef = (meta, entityCode, attributeCode) => meta.entityAttributes[entityCode][attributeCode]
-
-const hasPrimaryKey = (meta, entityCode) =>
-  attributeCodes(meta, entityCode)
-    .map(attributeCode => attributeDef(meta, entityCode, attributeCode).status)
+const explicitPKAttEntry = (meta, entityCode) => {
+  const attDefs = attributeEntries(meta, entityCode)
     .filter(isPrimaryKey)
-    .length > 0
+  return attDefs.length > 0 ? attDefs[0] : null
+}
 
-const enumValues = (meta, entityCode, attributeCode) => {
-  const attDef = attributeDef(meta, entityCode, attributeCode)
-  return attDef.dataType.trim().substring(enumPrefix.length)
+const ownAttributeEntries = (meta, entityCode, defaultPKDataType) => {
+  const explicit = attributeEntries(meta, entityCode)
+    .filter(isOwnAttribute)
+  const hasPrimaryKey = explicit.filter(isPrimaryKey).length > 0
+  const before = []
+  if (!hasPrimaryKey) {
+    before.push(['id', { status: 'APK', dataType: defaultPKDataType }])
+  }
+  return before.concat(explicit)
+}
+
+const userAttributes = (meta, entityCode) =>
+  ownAttributeEntries(meta, entityCode)
+    .filter(attributeEntry => !isPrimaryKey(attributeEntry))
+
+const referredLabelAttribute = (meta, entityCode) => {
+  const userAttrs = userAttributes(meta, entityCode)
+  return userAttrs.length > 0 ? userAttrs[0] : []
+}
+
+const enumValues = ({ dataType }) => {
+  return dataType
+    .trim()
+    .substring(enumPrefix.length)
     .split(',')
     .map(s => s.trim())
     .map(s => s.replace(/\s+/g, '_'))
 }
 
-const getExplicitPKAttDef = (meta, entityCode) => {
-  const explicitPKAttDefs = attributeCodes(meta, entityCode)
-    .map(attributeCode => attributeDef(meta, entityCode, attributeCode))
-    .filter(attDef => isPrimaryKey(attDef.status))
-  return explicitPKAttDefs.length > 0 ? explicitPKAttDefs[0] : null
-}
+const filterAttributes = predicate => (meta, entityCode) =>
+  ownAttributeEntries(meta, entityCode)
+    .filter(predicate)
+const filterToOne = filterAttributes(isToOne)
+const filterEnum = filterAttributes(isEnum)
+
+const hasAttribute = predicate => (meta, entityCode) =>
+  filterAttributes(predicate)(meta, entityCode).length > 0
+const hasEnum = hasAttribute(isEnum)
+const hasDate = hasAttribute(isDate)
+const hasDateTime = hasAttribute(isDateTime)
 
 module.exports = {
   entityCodes,
-  attributeCodes,
-  attributeDef,
-  hasPrimaryKey,
+  attributeEntries,
   isPrimaryKey,
-  isForeignKey,
+  isToOne,
   isUnique,
   isNotNull,
-  isToMany,
   isEnum,
+  isDate,
+  isDateTime,
   extractEntityCodeFromRef,
+  explicitPKAttEntry,
+  ownAttributeEntries,
+  referredLabelAttribute,
   enumValues,
-  getExplicitPKAttDef
+  filterToOne,
+  filterEnum,
+  hasEnum,
+  hasDate,
+  hasDateTime
 }

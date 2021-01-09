@@ -6,8 +6,8 @@ import { defaultDateFnsLocale } from '../../i18n'
 import { isValid as isDateValid, parse } from 'date-fns'
 import { useFormField } from '../utils'
 
-const Base = ({ name, value, placeholder, dateFormat, ...rest }) => {
-  const [, , { setTouched, setValue }] = useField({ name, ...rest })
+const Base = ({ name, placeholder, dateFormat, ...rest }) => {
+  const [{ value }, , { setTouched, setValue }] = useField({ name, ...rest })
   const { isInvalid } = useFormField(name)
 
   const handleChange = newValue => {
@@ -41,13 +41,42 @@ const Base = ({ name, value, placeholder, dateFormat, ...rest }) => {
   </>
 }
 
-export const DatePicker = ({ ...rest }) =>
+export const DatePicker = props =>
   <Form.Control as={Base}
                 dateFormat="PP"
-                {...rest}/>
+                {...props}/>
 
-export const DateTimePicker = ({ ...rest }) =>
+export const DateTimePicker = props =>
   <Form.Control as={Base}
                 showTimeSelect
                 dateFormat="PPp"
-                {...rest}/>
+                {...props}/>
+
+const RangePicker = ({ pickerType, name, ...rest }) => {
+  const Picker = pickerType
+  const [{ value: startDate }] = useField({ name: `${name}From` })
+  const [{ value: endDate }] = useField({ name: `${name}To` })
+
+  return <>
+    <div className="d-flex">
+      <Picker name={`${name}From`}
+              selectsStart
+              startDate={startDate}
+              endDate={endDate}
+              {...rest}/>
+      <span style={{ paddingTop: 6 }}>&nbsp;&ndash;&nbsp;</span>
+      <Picker name={`${name}To`}
+              selectsEnd
+              startDate={startDate}
+              endDate={endDate}
+              minDate={startDate}
+              {...rest}/>
+    </div>
+  </>
+}
+
+export const DateRangePicker = props =>
+  <RangePicker pickerType={DatePicker} {...props}/>
+
+export const DateTimeRangePicker = props =>
+  <RangePicker pickerType={DateTimePicker} {...props}/>
