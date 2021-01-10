@@ -102,6 +102,8 @@ const toOneTargets = (meta, entityCode) => {
 
 const isToOneTarget = (meta, entityCode) => toOneTargets(meta, entityCode).length > 0
 
+const primaryKey = (meta, entityCode) => filterAttributes(isPrimaryKey)(meta, entityCode)[0]
+
 module.exports = {
   entityCodes,
   attributeEntries,
@@ -126,5 +128,6 @@ module.exports = {
   hasDate,
   hasDateTime,
   toOneTargets,
-  isToOneTarget
+  isToOneTarget,
+  primaryKey
 }

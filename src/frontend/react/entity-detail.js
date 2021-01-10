@@ -18,9 +18,10 @@ const {
   hasDate,
   hasDateTime,
   toOneTargets,
-  isToOneTarget
+  isToOneTarget,
+  primaryKey
 } = require('../../meta/entity')
-const { pkg, url, label, labelPlural } = require('./shared')
+const { pkg, url, label, labelPlural, codeLower } = require('./shared')
 
 const generateDetail = (meta, setup, entityCode) => {
   const field = ({ label, value, children }) =>
@@ -130,7 +131,7 @@ const patch = (data, patch, wrapAction) => async () => {
     toOneTargets(meta, entityCode)
       .map(([referringEntityCode, [attributeCode]]) => ({
         url: url(referringEntityCode),
-        idCode: `${attributeCode}Id`,
+        idCode: codeLower(`${attributeCode} ${primaryKey(meta, referringEntityCode)[0]}`),
         label: label(`${attributeCode} ${labelPlural(referringEntityCode)}`)
       }))
       .map(navigationButton)
