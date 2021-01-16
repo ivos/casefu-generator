@@ -2,6 +2,7 @@ const { entityCodes } = require('../../meta/entity')
 const { generateList } = require('./entity-list')
 const { generateDetail } = require('./entity-detail')
 const { generateCreate } = require('./entity-create')
+const { generateEdit } = require('./entity-edit')
 const { generateRouter } = require('./entity-router')
 
 const generateEntity = (meta, setup, entityCode) => {
@@ -10,6 +11,7 @@ const generateEntity = (meta, setup, entityCode) => {
   generateList(meta, setup, entityCode)
   generateDetail(meta, setup, entityCode)
   generateCreate(meta, setup, entityCode)
+  generateEdit(meta, setup, entityCode)
   generateRouter(meta, setup, entityCode)
 }
 
