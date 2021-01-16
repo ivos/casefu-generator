@@ -2,8 +2,9 @@ const fse = require('fs-extra')
 const path = require('path')
 const { generateHeaderJs } = require('./header')
 const { generateAppJs } = require('./app')
-const { generatePackageJson } = require('./package')
 const { generateEntities } = require('./entity')
+const { generateLocalStorageJs } = require('./local-storage')
+const { generatePackageJson } = require('./package')
 
 const copyStaticContent = setup => {
   console.log('- Copying React static content')
@@ -17,6 +18,7 @@ const generateReact = (meta, setup) => {
   generateHeaderJs(meta, setup)
   generateAppJs(meta, setup)
   generateEntities(meta, setup)
+  generateLocalStorageJs(meta, setup)
   generatePackageJson(meta, setup)
 }
 

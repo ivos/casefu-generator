@@ -1,4 +1,13 @@
-const localStorageKey = 'CaseFuGeneratorAppData'
+const fs = require('fs')
+const path = require('path')
+const { pascalCase } = require('change-case')
+
+const generateLocalStorageJs = (meta, setup) => {
+  console.log('- Generating React "local-storage.js"')
+
+  const localStorageKey = 'CaseFuGeneratorAppData' + (meta.systemName && pascalCase(meta.systemName))
+
+  const content = `const localStorageKey = '${localStorageKey}'
 
 export const get = () => JSON.parse(window.localStorage.getItem(localStorageKey)) || {}
 export const update = fn => {
@@ -46,7 +55,7 @@ export const expand = (values, from, to, key) => {
 }
 
 export const create = (values, key, sort) => {
-  let id = undefined
+  let id
   update(data => {
     id = nextId(data[key])
     data[key].push({ ...values, id, version: 0 })
@@ -62,11 +71,21 @@ export const modify = (id, version, key, sort, modificationFn) => {
   update(data => {
     const index = data[key].findIndex(item => item.id === id && item.version === version)
     if (index < 0) {
-      throw new Error(`Entity '${key}' with id ${id} and version ${version} not found.`)
+      throw new Error(\`Entity '\${key}' with id \${id} and version \${version} not found.\`)
     }
     version++
     data[key][index] = modificationFn(id, version, data[key][index])
     sort(data[key])
     return data
   })
+}
+`
+
+  const dir = path.join(setup.outputDir, 'frontend')
+  fs.mkdirSync(dir, { recursive: true })
+  fs.writeFileSync(path.join(dir, 'src', 'api', 'local-storage.js'), content)
+}
+
+module.exports = {
+  generateLocalStorageJs
 }
