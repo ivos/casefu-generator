@@ -5,6 +5,7 @@ const { generateCreate } = require('./entity-create')
 const { generateEdit } = require('./entity-edit')
 const { generateRouter } = require('./entity-router')
 const { generateSelects } = require('./entity-selects')
+const { generateEnumSelects } = require('./entity-enum-select')
 
 const generateEntity = (meta, setup, entityCode) => {
   console.log('  - ' + entityCode)
@@ -15,6 +16,7 @@ const generateEntity = (meta, setup, entityCode) => {
   generateEdit(meta, setup, entityCode)
   generateRouter(meta, setup, entityCode)
   generateSelects(meta, setup, entityCode)
+  generateEnumSelects(meta, setup, entityCode)
 }
 
 const generateEntities = (meta, setup) => {
