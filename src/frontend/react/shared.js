@@ -9,6 +9,7 @@ const labelLower = code => noCase(code)
 const codeLower = code => camelCase(code)
 const codeUpper = code => pascalCase(code)
 const codePlural = code => pascalCase(pluralize(code))
+const codePluralLower = code => camelCase(pluralize(code))
 
 module.exports = {
   pkg,
@@ -18,5 +19,6 @@ module.exports = {
   labelLower,
   codeLower,
   codeUpper,
-  codePlural
+  codePlural,
+  codePluralLower
 }

@@ -11,7 +11,7 @@ const {
   isNotNull,
   isEnum,
   extractEntityCodeFromRef,
-  explicitPKAttEntry,
+  getPKDataTypeForFK,
   ownAttributeEntries,
   enumValues
 } = require('../meta/entity')
@@ -21,25 +21,6 @@ const indent = '    '
 const getTableName = entityCode => snakeCase(pluralize(entityCode))
 const getColumnName = attributeCode => snakeCase(attributeCode)
 const getEnumTypeName = (entityCode, attributeCode) => `${getTableName(entityCode)}__${getColumnName(attributeCode)}`
-
-const pkToFkConversions = {
-  serial: 'integer',
-  bigserial: 'bigint'
-}
-
-const getPKDataTypeForFK = (meta, entityCode) => {
-  const attEntry = explicitPKAttEntry(meta, entityCode)
-  if (attEntry) {
-    const [, { dataType }] = attEntry
-    const referredEntityCode = extractEntityCodeFromRef(dataType)
-    if (referredEntityCode !== dataType) {
-      return getPKDataTypeForFK(meta, referredEntityCode)
-    }
-    const converted = pkToFkConversions[dataType.toLowerCase()]
-    return converted || dataType
-  }
-  return 'bigint'
-}
 
 const columnType = (meta, entityCode, attributeEntry) => {
   const [attributeCode, attributeDef] = attributeEntry

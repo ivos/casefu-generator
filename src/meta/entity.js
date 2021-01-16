@@ -1,5 +1,12 @@
 const enumPrefix = 'enum: '
 
+const pkToFkConversions = {
+  smallserial: 'smallint',
+  serial: 'integer',
+  bigserial: 'bigint',
+  identity: 'bigint'
+}
+
 const normalizeRelationStatus = status =>
   (status || '')
     .toLowerCase()
@@ -18,8 +25,22 @@ const isToMany = ([_, { status }]) => ['n', '1..n'].includes(normalizeRelationSt
 const isOwnAttribute = attributeEntry => !isToMany(attributeEntry)
 const isEnum = ([_, { dataType }]) => dataType && dataType.indexOf(enumPrefix) === 0
 const isStatus = ([_, { status }]) => status === 'S'
+const isStatusEnum = attributeEntry => isStatus(attributeEntry) && isEnum(attributeEntry)
 const isDate = ([_, { dataType }]) => dataType && ['date'].includes(dataType.toLowerCase())
-const isDateTime = ([_, { dataType }]) => dataType && ['timestamp', 'datetime'].includes(dataType.toLowerCase())
+const isDateTime = ([_, { dataType }]) => dataType &&
+  ['timestamp', 'datetime', 'smalldatetime', 'time']
+    .filter(type => dataType.toLowerCase().indexOf(type) === 0)
+    .length > 0
+const isTemporal = attributeEntry => isDate(attributeEntry) || isDateTime(attributeEntry)
+const isNumber = ([_, { dataType }]) => dataType && (
+  ['tinyint', 'smallint', 'int2', 'year', 'integer', 'int', 'mediumint', 'int4', 'signed', 'bigint', 'int8', 'long',
+    'real', 'double precision',
+    'smallserial', 'serial', 'bigserial', 'identity',
+    'binary_float', 'binary_double'].includes(dataType.toLowerCase()) ||
+  ['decimal', 'dec', 'numeric', 'number', 'double', 'float', 'float8', 'real', 'float4']
+    .filter(type => dataType.toLowerCase().indexOf(type) === 0)
+    .length > 0
+)
 
 const stripWrappers = (wrapper, text) => {
   let matches = text.match(wrapper)
@@ -45,6 +66,20 @@ const explicitPKAttEntry = (meta, entityCode) => {
   const attDefs = attributeEntries(meta, entityCode)
     .filter(isPrimaryKey)
   return attDefs.length > 0 ? attDefs[0] : null
+}
+
+const getPKDataTypeForFK = (meta, entityCode) => {
+  const attEntry = explicitPKAttEntry(meta, entityCode)
+  if (attEntry) {
+    const [, { dataType }] = attEntry
+    const referredEntityCode = extractEntityCodeFromRef(dataType)
+    if (referredEntityCode !== dataType) {
+      return getPKDataTypeForFK(meta, referredEntityCode)
+    }
+    const converted = pkToFkConversions[dataType.toLowerCase()]
+    return converted || dataType
+  }
+  return 'bigint'
 }
 
 const ownAttributeEntries = (meta, entityCode, defaultPKDataType) => {
@@ -77,18 +112,24 @@ const enumValues = ({ dataType }) => {
 }
 
 const filterAttributes = predicate => (meta, entityCode) =>
-  ownAttributeEntries(meta, entityCode)
+  ownAttributeEntries(meta, entityCode, 'bigint')
     .filter(predicate)
 const filterToOne = filterAttributes(isToOne)
 const filterEnum = filterAttributes(isEnum)
+const filterStatusEnum = filterAttributes(isStatusEnum)
+const filterDate = filterAttributes(isDate)
+const filterDateTime = filterAttributes(isDateTime)
+const filterTemporal = filterAttributes(isTemporal)
 
 const hasAttribute = predicate => (meta, entityCode) =>
   filterAttributes(predicate)(meta, entityCode).length > 0
 const hasToOne = hasAttribute(isToOne)
 const hasEnum = hasAttribute(isEnum)
-const hasStatusEnum = hasAttribute(attributeEntry => isEnum(attributeEntry) && isStatus(attributeEntry))
+const hasStatusEnum = hasAttribute(isStatusEnum)
 const hasDate = hasAttribute(isDate)
 const hasDateTime = hasAttribute(isDateTime)
+const hasTemporal = hasAttribute(isTemporal)
+const hasNumber = hasAttribute(isNumber)
 
 const toOneTargets = (meta, entityCode) => {
   const arrays = entityCodes(meta)
@@ -113,20 +154,30 @@ module.exports = {
   isNotNull,
   isEnum,
   isStatus,
+  isStatusEnum,
   isDate,
   isDateTime,
+  isTemporal,
+  isNumber,
   extractEntityCodeFromRef,
   explicitPKAttEntry,
+  getPKDataTypeForFK,
   ownAttributeEntries,
   referredLabelAttribute,
   enumValues,
   filterToOne,
   filterEnum,
+  filterStatusEnum,
+  filterDate,
+  filterDateTime,
+  filterTemporal,
   hasToOne,
   hasEnum,
   hasStatusEnum,
   hasDate,
   hasDateTime,
+  hasTemporal,
+  hasNumber,
   toOneTargets,
   isToOneTarget,
   primaryKey

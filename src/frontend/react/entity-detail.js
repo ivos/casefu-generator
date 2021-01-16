@@ -17,6 +17,7 @@ const {
   hasStatusEnum,
   hasDate,
   hasDateTime,
+  hasTemporal,
   toOneTargets,
   isToOneTarget,
   primaryKey
@@ -82,7 +83,7 @@ const generateDetail = (meta, setup, entityCode) => {
     imports += ` patch${entityCode},`
   }
   imports += ` use${entityCode} } from './${pkg(entityCode)}-api'\n`
-  if (hasDate(meta, entityCode) || hasDateTime(meta, entityCode)) {
+  if (hasTemporal(meta, entityCode)) {
     imports += `import { `
     const items = []
     if (hasDate(meta, entityCode)) {

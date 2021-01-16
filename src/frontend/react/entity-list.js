@@ -12,7 +12,8 @@ const {
   filterEnum,
   hasEnum,
   hasDate,
-  hasDateTime
+  hasDateTime,
+  hasTemporal
 } = require('../../meta/entity')
 const {
   url, pkg, label, labelPlural, labelLower, codeLower, codeUpper, codePlural
@@ -128,7 +129,7 @@ import { Form } from 'react-bootstrap'
     .join('')
   imports += `import { ${codeLower(entityCode)}FromApi, ${codeLower(entityCode)}ToApi, use${codePlural(entityCode)} }` +
     ` from './${pkg(entityCode)}-api'\n`
-  if (hasDate(meta, entityCode) || hasDateTime(meta, entityCode)) {
+  if (hasTemporal(meta, entityCode)) {
     imports += `import { `
     const items = []
     if (hasDate(meta, entityCode)) {
