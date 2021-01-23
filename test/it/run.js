@@ -57,21 +57,39 @@ const processTest = (dir, testedFn) => {
   console.log(chalk.inverse('Processing test case') + ` ${dir}`)
   const meta = JSON.parse(fs.readFileSync(path.join(dir, 'meta.json'), encoding))
   const setup = JSON.parse(fs.readFileSync(path.join(dir, 'setup.json'), encoding))
+  const testSetupPath = path.join(dir, 'test-setup.json')
+  const testSetup = fs.existsSync(testSetupPath) ? JSON.parse(fs.readFileSync(testSetupPath, encoding)) : {}
   if (setup.outputDir) {
     fs.rmdirSync(setup.outputDir, { recursive: true })
   }
   testedFn(meta, setup)
 
-  const expectedDir = path.join(dir, 'expected')
   const actualDir = setup.outputDir
-  const expectedFiles = listFiles(expectedDir, '').sort()
   const actualFiles = listFiles(actualDir, '').sort()
+
+  const expectedDir = path.join(dir, 'expected')
+  const expectedFilesToPaths = {}
+  let expectedFiles = []
+  const listExpectedFiles = baseDir => {
+    const files = listFiles(baseDir, '')
+    expectedFiles = expectedFiles.concat(files)
+    files.forEach(file => {
+      expectedFilesToPaths[file] = path.join(baseDir, file)
+    })
+  }
+  listExpectedFiles(expectedDir)
+  if (testSetup.includeStaticDirs) {
+    testSetup.includeStaticDirs.forEach(includeStaticDir => {
+      listExpectedFiles(includeStaticDir)
+    })
+  }
+  expectedFiles.sort()
 
   let message
   let error = false
   expectedFiles.forEach(file => {
     if (actualFiles.includes(file)) {
-      const expectedContent = fs.readFileSync(path.join(expectedDir, file), encoding)
+      const expectedContent = fs.readFileSync(expectedFilesToPaths[file], encoding)
       const actualContent = fs.readFileSync(path.join(actualDir, file), encoding)
       if (expectedContent !== actualContent) {
         if (replaceOnError) {
@@ -115,7 +133,7 @@ const run = (testsDir, testedFn) => {
     result += `, skipped: ${skipCount}`
   }
   if (errorCount !== 0) {
-    result += ', ' + chalk.bgRedBright(`errors: ${errorCount}`)
+    result += ', ' + chalk.bgRedBright(chalk.white(`errors: ${errorCount}`))
   }
   const passCount = testCount - errorCount - skipCount
   if (passCount !== 0) {

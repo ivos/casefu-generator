@@ -2,6 +2,7 @@
   "outputDir": "test/output",
   "generate": {
     "database": "Postgres",
-    "backend": "Hasura"
+    "backend": "Hasura",
+    "frontend": "React"
   }
 }

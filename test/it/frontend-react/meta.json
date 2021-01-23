@@ -1,0 +1,88 @@
+{
+  "systemName": "Some system name",
+  "sections": {
+    "Customer": {
+      "type": "entity",
+      "name": "Customer"
+    },
+    "Order": {
+      "type": "entity",
+      "name": "Order"
+    },
+    "Branch": {
+      "type": "entity",
+      "name": "Branch"
+    }
+  },
+  "references": {
+    "Order": [
+      "Customer"
+    ],
+    "Branch": [
+      "Customer"
+    ]
+  },
+  "attributeToEntity": {},
+  "entityAttributes": {
+    "Customer": {
+      "id": {
+        "status": "APK",
+        "dataType": "bigserial"
+      },
+      "name": {
+        "status": "M",
+        "dataType": "text"
+      },
+      "status": {
+        "status": "S",
+        "dataType": "enum: active, disabled"
+      }
+    },
+    "Order": {
+      "orderNumber": {
+        "status": "NK",
+        "dataType": "text"
+      },
+      "customer": {
+        "status": "n : 1",
+        "dataType": "`#Customer`"
+      },
+      "status": {
+        "status": "S",
+        "dataType": "enum: created, submitted, delivered"
+      },
+      "received": {
+        "status": "M",
+        "dataType": "timestamp"
+      },
+      "deliveryDate": {
+        "status": "M",
+        "dataType": "date"
+      },
+      "note": {
+        "status": "O",
+        "dataType": "text"
+      }
+    },
+    "Branch": {
+      "street": {
+        "status": "O",
+        "dataType": "text"
+      },
+      "city": {
+        "status": "O",
+        "dataType": "text"
+      },
+      "zipCode": {
+        "status": "O",
+        "dataType": "text"
+      },
+      "note": {
+        "status": null,
+        "dataType": ""
+      }
+    }
+  },
+  "errors": [],
+  "backReferences": {}
+}
