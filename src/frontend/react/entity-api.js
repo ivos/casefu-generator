@@ -37,8 +37,16 @@ import {`
   atLeast,
   atMost,`
   }
+  const hasUnspecificOwnAtts =
+    ownAttributeEntries(meta, entityCode, 'bigint')
+      .filter(attributeEntry =>
+        !isToOne(attributeEntry) && !isEnum(attributeEntry) && !isNumber(attributeEntry) && !isTemporal(attributeEntry))
+      .length > 0
+  if (hasUnspecificOwnAtts) {
+    imports += `
+  caseInsensitiveMatch,`
+  }
   imports += `
-  caseInsensitiveMatch,
   create,
   defaultSWROptions,
   delay,

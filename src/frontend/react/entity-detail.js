@@ -79,7 +79,7 @@ const generateDetail = (meta, setup, entityCode) => {
     imports += `import { sentenceCase } from 'change-case'\n`
   }
   imports += `import {`
-  if (hasEnum(meta, entityCode)) {
+  if (hasStatusEnum(meta, entityCode)) {
     imports += ` patch${entityCode},`
   }
   imports += ` use${entityCode} } from './${pkg(entityCode)}-api'\n`
