@@ -47,13 +47,13 @@ create table fs
 create table referring_rs
 (
     id bigserial primary key,
-    fk bigint not null,
-    ofk varchar(15),
-    n_to_1 varchar(15) not null,
-    n_to_0_1 varchar(15),
-    n_to_1_1 integer not null,
-    one_to_1 bigint not null,
-    not_a_ref bigint not null
+    fk_code bigint not null,
+    ofk_code varchar(15),
+    n_to_1_code varchar(15) not null,
+    n_to_0_1_code varchar(15),
+    n_to_1_1_code integer not null,
+    one_to_1_id bigint not null,
+    not_a_ref_id bigint not null
 );
 
 -- Entity: Referring S
@@ -72,7 +72,7 @@ create table masters
 create table slaves
 (
     id bigserial primary key,
-    master bigint not null
+    master_id bigint not null
 );
 
 
@@ -84,18 +84,18 @@ alter table cs
 alter table ds
     add constraint fk_ds__code foreign key (code) references cs on delete cascade;
 alter table referring_rs
-    add constraint fk_referring_rs__fk foreign key (fk) references as on delete cascade;
+    add constraint fk_referring_rs__fk foreign key (fk_code) references as on delete cascade;
 alter table referring_rs
-    add constraint fk_referring_rs__ofk foreign key (ofk) references bs on delete cascade;
+    add constraint fk_referring_rs__ofk foreign key (ofk_code) references bs on delete cascade;
 alter table referring_rs
-    add constraint fk_referring_rs__n_to_1 foreign key (n_to_1) references cs on delete cascade;
+    add constraint fk_referring_rs__n_to_1 foreign key (n_to_1_code) references cs on delete cascade;
 alter table referring_rs
-    add constraint fk_referring_rs__n_to_0_1 foreign key (n_to_0_1) references ds on delete cascade;
+    add constraint fk_referring_rs__n_to_0_1 foreign key (n_to_0_1_code) references ds on delete cascade;
 alter table referring_rs
-    add constraint fk_referring_rs__n_to_1_1 foreign key (n_to_1_1) references es on delete cascade;
+    add constraint fk_referring_rs__n_to_1_1 foreign key (n_to_1_1_code) references es on delete cascade;
 alter table referring_rs
-    add constraint fk_referring_rs__one_to_1 foreign key (one_to_1) references fs on delete cascade;
+    add constraint fk_referring_rs__one_to_1 foreign key (one_to_1_id) references fs on delete cascade;
 alter table referring_rs
-    add constraint fk_referring_rs__not_a_ref foreign key (not_a_ref) references varchar_42_s on delete cascade;
+    add constraint fk_referring_rs__not_a_ref foreign key (not_a_ref_id) references varchar_42_s on delete cascade;
 alter table slaves
-    add constraint fk_slaves__master foreign key (master) references masters on delete cascade;
+    add constraint fk_slaves__master foreign key (master_id) references masters on delete cascade;

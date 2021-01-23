@@ -30,7 +30,7 @@ create table events
     id bigserial primary key,
     time timestamp not null,
     status events__status not null,
-    location bigint not null
+    location_id bigint not null
 );
 
 
@@ -38,4 +38,4 @@ create table events
 ---------------
 
 alter table events
-    add constraint fk_events__location foreign key (location) references locations on delete cascade;
+    add constraint fk_events__location foreign key (location_id) references locations on delete cascade;

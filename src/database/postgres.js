@@ -11,6 +11,7 @@ const {
   isNotNull,
   isEnum,
   extractEntityCodeFromRef,
+  explicitPKAttEntry,
   getPKDataTypeForFK,
   ownAttributeEntries,
   enumValues
@@ -19,18 +20,28 @@ const {
 const indent = '    '
 
 const getTableName = entityCode => snakeCase(pluralize(entityCode))
-const getColumnName = attributeCode => snakeCase(attributeCode)
-const getEnumTypeName = (entityCode, attributeCode) => `${getTableName(entityCode)}__${getColumnName(attributeCode)}`
+const getColumnName = (meta, attributeEntry) => {
+  const [attributeCode, { dataType }] = attributeEntry
+  if (isToOne(attributeEntry) && !isPrimaryKey(attributeEntry)) {
+    const referredEntityCode = extractEntityCodeFromRef(dataType)
+    const attEntry = explicitPKAttEntry(meta, referredEntityCode)
+    const id = attEntry ? attEntry[0] : 'id'
+    return snakeCase(`${attributeCode} ${id}`)
+  }
+  return snakeCase(attributeCode)
+}
+const getEnumTypeName = (meta, entityCode, attributeEntry) =>
+  `${getTableName(entityCode)}__${getColumnName(meta, attributeEntry)}`
 
 const columnType = (meta, entityCode, attributeEntry) => {
-  const [attributeCode, attributeDef] = attributeEntry
+  const [, attributeDef] = attributeEntry
   let type = attributeDef.dataType || 'text'
   if (isToOne(attributeEntry)) {
     const referredEntityCode = extractEntityCodeFromRef(type)
     type = getPKDataTypeForFK(meta, referredEntityCode)
   }
   if (isEnum(attributeEntry)) {
-    type = `${getEnumTypeName(entityCode, attributeCode)}`
+    type = `${getEnumTypeName(meta, entityCode, attributeEntry)}`
   }
   if (isPrimaryKey(attributeEntry)) {
     return `${type} primary key`
@@ -42,19 +53,20 @@ const columnType = (meta, entityCode, attributeEntry) => {
 }
 
 const columnDef = (meta, entityCode) => attributeEntry =>
-  `${indent}${getColumnName(attributeEntry[0])} ${columnType(meta, entityCode, attributeEntry)}`
+  `${indent}${getColumnName(meta, attributeEntry)} ${columnType(meta, entityCode, attributeEntry)}`
 
 const columnDefs = (meta, entityCode) =>
   ownAttributeEntries(meta, entityCode, 'bigserial')
     .map(columnDef(meta, entityCode))
     .join(',\n')
 
-const fkConstraint = (meta, entityCode) => ([attributeCode, { dataType }]) => {
+const fkConstraint = (meta, entityCode) => attributeEntry => {
+  const [attributeCode, { dataType }] = attributeEntry
   const tableName = getTableName(entityCode)
-  const columnName = getColumnName(attributeCode)
+  const columnName = getColumnName(meta, attributeEntry)
   const referredEntityCode = extractEntityCodeFromRef(dataType || 'text')
   const referredTableName = getTableName(referredEntityCode)
-  return `\nalter table ${tableName}\n${indent}add constraint fk_${tableName}__${columnName}` +
+  return `\nalter table ${tableName}\n${indent}add constraint fk_${tableName}__${snakeCase(attributeCode)}` +
     ` foreign key (${columnName}) references ${referredTableName} on delete cascade;`
 }
 
@@ -64,20 +76,21 @@ const fkConstraints = meta => entityCode =>
     .map(fkConstraint(meta, entityCode))
     .join('')
 
-const uniqueIndex = entityCode => ([attributeCode, _]) => {
+const uniqueIndex = (meta, entityCode) => attributeEntry => {
   const tableName = getTableName(entityCode)
-  const columnName = getColumnName(attributeCode)
+  const columnName = getColumnName(meta, attributeEntry)
   return `\ncreate unique index ui_${tableName}__${columnName} on ${tableName} (${columnName});`
 }
 
 const uniqueIndexes = (meta, entityCode) =>
   attributeEntries(meta, entityCode)
     .filter(isUnique)
-    .map(uniqueIndex(entityCode))
+    .map(uniqueIndex(meta, entityCode))
     .join('')
 
-const enumType = (meta, entityCode) => ([attributeCode, attributeDef]) => {
-  const enumTypeName = getEnumTypeName(entityCode, attributeCode)
+const enumType = (meta, entityCode) => attributeEntry => {
+  const [, attributeDef] = attributeEntry
+  const enumTypeName = getEnumTypeName(meta, entityCode, attributeEntry)
   const values = enumValues(attributeDef)
     .map(s => `'${s}'`)
     .join(', ')
