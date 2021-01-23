@@ -6,7 +6,7 @@ const {
 } = require('../../meta/entity')
 const { pkg, codeUpper, codePlural } = require('./shared')
 
-const generateSelects = (meta, setup, entityCode) => {
+const generateSelects = (meta, targetDir, entityCode) => {
   const [labelAttributeCode] = referredLabelAttribute(meta, entityCode)
 
   const content = `import React from 'react'
@@ -27,7 +27,7 @@ export const ${entityCode}SearchSelect = ({ name, ...rest }) =>
     {...rest}/>
 `
 
-  const dir = path.join(setup.outputDir, 'frontend', 'src', 'app', pkg(entityCode))
+  const dir = path.join(targetDir, 'frontend', 'src', 'app', pkg(entityCode))
   fs.mkdirSync(dir, { recursive: true })
   fs.writeFileSync(path.join(dir, `${entityCode}Selects.js`), content)
 }

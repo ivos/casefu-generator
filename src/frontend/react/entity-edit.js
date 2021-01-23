@@ -14,7 +14,7 @@ const {
 } = require('../../meta/entity')
 const { pkg, url, label, labelLower, codeUpper } = require('./shared')
 
-const generateEdit = (meta, setup, entityCode) => {
+const generateEdit = (meta, targetDir, entityCode) => {
   const attributeEntrires =
     ownAttributeEntries(meta, entityCode)
       .filter(([_, { status }]) => !['APK', 'S', 'V'].includes(status))
@@ -122,7 +122,7 @@ ${fields.join('')}
   </EditScreen>
 `
 
-  const dir = path.join(setup.outputDir, 'frontend', 'src', 'app', pkg(entityCode))
+  const dir = path.join(targetDir, 'frontend', 'src', 'app', pkg(entityCode))
   fs.mkdirSync(dir, { recursive: true })
   fs.writeFileSync(path.join(dir, `${entityCode}Edit.js`), content)
 }

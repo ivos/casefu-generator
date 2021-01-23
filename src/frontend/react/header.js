@@ -3,7 +3,7 @@ const path = require('path')
 const { entityCodes } = require('../../meta/entity')
 const { url, labelPlural } = require('./shared')
 
-const generateHeaderJs = (meta, setup) => {
+const generateHeaderJs = (meta, targetDir) => {
   console.log('- Generating React "Header.js"')
 
   const navItem = ({ url, label }) => `
@@ -33,7 +33,7 @@ export default () =>
     </Navbar.Collapse>
   </Navbar>
 `
-  const dir = path.join(setup.outputDir, 'frontend', 'src', 'layout')
+  const dir = path.join(targetDir, 'frontend', 'src', 'layout')
   fs.mkdirSync(dir, { recursive: true })
   fs.writeFileSync(path.join(dir, 'Header.js'), content)
 }

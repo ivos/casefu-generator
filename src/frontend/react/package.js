@@ -2,7 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const { paramCase } = require('change-case')
 
-const generatePackageJson = (meta, setup) => {
+const generatePackageJson = (meta, targetDir) => {
   console.log('- Generating React "package.json"')
 
   const npmModuleName = meta.systemName ? paramCase(meta.systemName) : 'casefu-sample-app'
@@ -65,7 +65,7 @@ const generatePackageJson = (meta, setup) => {
   "proxy": "http://localhost:8000"
 }
 `
-  const dir = path.join(setup.outputDir, 'frontend')
+  const dir = path.join(targetDir, 'frontend')
   fs.mkdirSync(dir, { recursive: true })
   fs.writeFileSync(path.join(dir, 'package.json'), content)
 }

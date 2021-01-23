@@ -3,7 +3,7 @@ const path = require('path')
 const { entityCodes } = require('../../meta/entity')
 const { pkg, url } = require('./shared')
 
-const generateAppJs = (meta, setup) => {
+const generateAppJs = (meta, targetDir) => {
   console.log('- Generating React "App.js"')
 
   const importFn = ({ entityCode, pkg }) => `
@@ -47,7 +47,7 @@ export default () =>
     </Container>
   </Router>
 `
-  const dir = path.join(setup.outputDir, 'frontend', 'src')
+  const dir = path.join(targetDir, 'frontend', 'src')
   fs.mkdirSync(dir, { recursive: true })
   fs.writeFileSync(path.join(dir, 'App.js'), content)
 }

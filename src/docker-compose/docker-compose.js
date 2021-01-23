@@ -39,7 +39,7 @@ const frontendServices = () => `
     ports:
       - "3000:80"`
 
-const generate = (setup) => {
+const generate = (setup, targetDir) => {
   console.log('- Generating Docker Compose "docker-compose.yaml"')
   let services = ''
   let volumes = ''
@@ -65,7 +65,7 @@ const generate = (setup) => {
   }
   const content = `version: '3.6'${services}${volumes}
 `
-  fs.writeFileSync(path.join(setup.outputDir, 'docker-compose.yaml'), content)
+  fs.writeFileSync(path.join(targetDir, 'docker-compose.yaml'), content)
 }
 
 module.exports = { generate }

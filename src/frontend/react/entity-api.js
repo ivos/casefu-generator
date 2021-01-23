@@ -25,7 +25,7 @@ const {
 } = require('../../meta/entity')
 const { pkg, url, codeLower, codeUpper, codePlural, codePluralLower } = require('./shared')
 
-const generateApi = (meta, setup, entityCode) => {
+const generateApi = (meta, targetDir, entityCode) => {
   const [labelAttributeCode] = referredLabelAttribute(meta, entityCode)
 
   let imports = `import useSWR from 'swr'
@@ -275,7 +275,7 @@ export const patch${entityCode} = (id, version, values) => {
 }
 `
 
-  const dir = path.join(setup.outputDir, 'frontend', 'src', 'app', pkg(entityCode))
+  const dir = path.join(targetDir, 'frontend', 'src', 'app', pkg(entityCode))
   fs.mkdirSync(dir, { recursive: true })
   fs.writeFileSync(path.join(dir, `${pkg(entityCode)}-api.js`), content)
 }

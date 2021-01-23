@@ -6,20 +6,19 @@ const { generateEntities } = require('./entity')
 const { generateLocalStorageJs } = require('./local-storage')
 const { generatePackageJson } = require('./package')
 
-const copyStaticContent = setup => {
+const copyStaticContent = (moduleDir, targetDir) => {
   console.log('- Copying React static content')
-  const dir = setup.outputDir
-  fse.ensureDirSync(dir)
-  fse.copySync(path.join('static', 'react'), dir)
+  fse.ensureDirSync(targetDir)
+  fse.copySync(path.join(moduleDir, 'static', 'react'), targetDir)
 }
 
-const generateReact = (meta, setup) => {
-  copyStaticContent(setup)
-  generateHeaderJs(meta, setup)
-  generateAppJs(meta, setup)
-  generateEntities(meta, setup)
-  generateLocalStorageJs(meta, setup)
-  generatePackageJson(meta, setup)
+const generateReact = (meta, moduleDir, targetDir) => {
+  copyStaticContent(moduleDir, targetDir)
+  generateHeaderJs(meta, targetDir)
+  generateAppJs(meta, targetDir)
+  generateEntities(meta, targetDir)
+  generateLocalStorageJs(meta, targetDir)
+  generatePackageJson(meta, targetDir)
 }
 
 module.exports = {

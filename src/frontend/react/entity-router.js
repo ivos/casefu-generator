@@ -2,8 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const { pkg } = require('./shared')
 
-const generateRouter = (meta, setup, entityCode) => {
-
+const generateRouter = (meta, targetDir, entityCode) => {
   const content = `import React from 'react'
 import { Route, Switch, useRouteMatch } from 'react-router-dom'
 import ${entityCode}Create from './${entityCode}Create'
@@ -33,7 +32,7 @@ export default () => {
 }
 `
 
-  const dir = path.join(setup.outputDir, 'frontend', 'src', 'app', pkg(entityCode))
+  const dir = path.join(targetDir, 'frontend', 'src', 'app', pkg(entityCode))
   fs.mkdirSync(dir, { recursive: true })
   fs.writeFileSync(path.join(dir, `${entityCode}Router.js`), content)
 }

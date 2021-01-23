@@ -38,16 +38,16 @@ const listFiles = (baseDir, dir) => {
   return result
 }
 
-const processDir = (baseDir, testedFn) => {
+const processDir = (baseDir, testedFn, moduleDir, targetDir) => {
   const files = listFiles(baseDir, '')
   files.forEach(file => {
     if (path.basename(file) === 'setup.json') {
-      processTest(path.join(baseDir, path.dirname(file)), testedFn)
+      processTest(path.join(baseDir, path.dirname(file)), testedFn, moduleDir, targetDir)
     }
   })
 }
 
-const processTest = (dir, testedFn) => {
+const processTest = (dir, testedFn, moduleDir, targetDir) => {
   testCount++
   if (!match.test(dir)) {
     console.log(chalk.inverse(`Skipping non-matching test case ${dir}`))
@@ -59,12 +59,10 @@ const processTest = (dir, testedFn) => {
   const setup = JSON.parse(fs.readFileSync(path.join(dir, 'setup.json'), encoding))
   const testSetupPath = path.join(dir, 'test-setup.json')
   const testSetup = fs.existsSync(testSetupPath) ? JSON.parse(fs.readFileSync(testSetupPath, encoding)) : {}
-  if (setup.outputDir) {
-    fs.rmdirSync(setup.outputDir, { recursive: true })
-  }
-  testedFn(meta, setup)
+  fs.rmdirSync(targetDir, { recursive: true })
+  testedFn(meta, setup, moduleDir, targetDir)
 
-  const actualDir = setup.outputDir
+  const actualDir = targetDir
   const actualFiles = listFiles(actualDir, '').sort()
 
   const expectedDir = path.join(dir, 'expected')
@@ -125,8 +123,8 @@ const processTest = (dir, testedFn) => {
   }
 }
 
-const run = (testsDir, testedFn) => {
-  processDir(testsDir, testedFn)
+const run = (testsDir, testedFn, moduleDir, targetDir) => {
+  processDir(testsDir, testedFn, moduleDir, targetDir)
 
   let result = chalk.inverse(`Tests run: ${testCount}`)
   if (skipCount !== 0) {
@@ -143,4 +141,6 @@ const run = (testsDir, testedFn) => {
 }
 
 const testsDir = 'test/it'
-run(testsDir, generator.generate)
+const moduleDir = ''
+const targetDir = 'test/output'
+run(testsDir, generator.generate, moduleDir, targetDir)

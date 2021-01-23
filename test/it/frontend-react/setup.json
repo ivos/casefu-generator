@@ -1,5 +1,4 @@
 {
-  "outputDir": "test/output",
   "generate": {
     "frontend": "React"
   }

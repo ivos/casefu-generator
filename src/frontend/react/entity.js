@@ -8,24 +8,24 @@ const { generateSelects } = require('./entity-selects')
 const { generateEnumSelects } = require('./entity-enum-select')
 const { generateApi } = require('./entity-api')
 
-const generateEntity = (meta, setup, entityCode) => {
+const generateEntity = (meta, targetDir, entityCode) => {
   console.log('  - ' + entityCode)
 
-  generateList(meta, setup, entityCode)
-  generateDetail(meta, setup, entityCode)
-  generateCreate(meta, setup, entityCode)
-  generateEdit(meta, setup, entityCode)
-  generateRouter(meta, setup, entityCode)
-  generateSelects(meta, setup, entityCode)
-  generateEnumSelects(meta, setup, entityCode)
-  generateApi(meta, setup, entityCode)
+  generateList(meta, targetDir, entityCode)
+  generateDetail(meta, targetDir, entityCode)
+  generateCreate(meta, targetDir, entityCode)
+  generateEdit(meta, targetDir, entityCode)
+  generateRouter(meta, targetDir, entityCode)
+  generateSelects(meta, targetDir, entityCode)
+  generateEnumSelects(meta, targetDir, entityCode)
+  generateApi(meta, targetDir, entityCode)
 }
 
-const generateEntities = (meta, setup) => {
+const generateEntities = (meta, targetDir) => {
   console.log('- Generating React UI for entities:')
 
   entityCodes(meta)
-    .forEach(entityCode => generateEntity(meta, setup, entityCode))
+    .forEach(entityCode => generateEntity(meta, targetDir, entityCode))
 }
 
 module.exports = {

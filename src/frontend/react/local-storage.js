@@ -2,7 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const { pascalCase } = require('change-case')
 
-const generateLocalStorageJs = (meta, setup) => {
+const generateLocalStorageJs = (meta, targetDir) => {
   console.log('- Generating React "local-storage.js"')
 
   const localStorageKey = 'CaseFuGeneratorAppData' + ((meta.systemName && pascalCase(meta.systemName)) || '')
@@ -81,7 +81,7 @@ export const modify = (id, version, key, sort, modificationFn) => {
 }
 `
 
-  const dir = path.join(setup.outputDir, 'frontend')
+  const dir = path.join(targetDir, 'frontend')
   fs.mkdirSync(dir, { recursive: true })
   fs.writeFileSync(path.join(dir, 'src', 'api', 'local-storage.js'), content)
 }

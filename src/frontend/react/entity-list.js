@@ -19,7 +19,7 @@ const {
   url, pkg, label, labelPlural, labelLower, codeLower, codeUpper, codePlural
 } = require('./shared')
 
-const generateList = (meta, setup, entityCode) => {
+const generateList = (meta, targetDir, entityCode) => {
   const columnHeader = ({ label }) => `
         <th>${label}</th>`
   const columnHeaders =
@@ -177,7 +177,7 @@ export default () =>
   />
 `
 
-  const dir = path.join(setup.outputDir, 'frontend', 'src', 'app', pkg(entityCode))
+  const dir = path.join(targetDir, 'frontend', 'src', 'app', pkg(entityCode))
   fs.mkdirSync(dir, { recursive: true })
   fs.writeFileSync(path.join(dir, `${entityCode}List.js`), content)
 }
