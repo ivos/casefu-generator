@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import { DetailScreen, EditButton, NavigationButton, SavingButton, StaticGroup } from '../../shared'
 import { sentenceCase } from 'change-case'
 import { patchCustomer, useCustomer } from './customer-api'
@@ -11,7 +12,7 @@ export default () =>
   <DetailScreen
     title="Customer detail"
     entityTitle="Customer"
-    rows={3}
+    rows={4}
     useResourceGet={useCustomer}
     buttons={
       (data, { isValidating, isChanging, wrapAction }) =>
@@ -37,6 +38,11 @@ export default () =>
       <>
         <StaticGroup label="Id" sm={[2, 10]} value={data.id}/>
         <StaticGroup label="Name" sm={[2, 10]} value={data.name}/>
+        <StaticGroup label="Country" sm={[2, 10]}>
+          <Link to={`/countries/${data.country?.id}`}>
+            {data.country?.name}
+          </Link>
+        </StaticGroup>
         <StaticGroup label="Status" sm={[2, 10]} value={sentenceCase(data.status)}/>
       </>
     }

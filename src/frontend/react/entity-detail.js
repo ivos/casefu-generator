@@ -27,7 +27,7 @@ const { pkg, url, label, labelPlural, codeLower } = require('./shared')
 const generateDetail = (meta, targetDir, entityCode) => {
   const field = ({ label, value, children }) =>
     children ? `
-        <StaticGroup label="Customer" sm={[2, 10]}>${children}
+        <StaticGroup label="${label}" sm={[2, 10]}>${children}
         </StaticGroup>`
       : `
         <StaticGroup label="${label}" sm={[2, 10]} value={${value}}/>`
@@ -53,7 +53,7 @@ const generateDetail = (meta, targetDir, entityCode) => {
           const pkAttributeCode = pkAttEntry ? pkAttEntry[0] : 'id'
           if (labelAttributeCode) {
             children = `
-          <Link to={\`/customers/\${data.${attributeCode}?.${pkAttributeCode}}\`}>
+          <Link to={\`/${url(referredEntityCode)}/\${data.${attributeCode}?.${pkAttributeCode}}\`}>
             {data.${attributeCode}?.${labelAttributeCode}}
           </Link>`
           }
@@ -102,6 +102,7 @@ const patch = (data, patch, wrapAction) => async () => {
 ` : ''
 
   const buttonsFnArgs = hasStatusEnum(meta, entityCode) ? `data, { isValidating, isChanging, wrapAction }` : ''
+  // TODO: needs data also for navigation buttons / toOneTargets
 
   const actionButton = ({ code, label, isLast }) => `
           <SavingButton variant="warning" className="mr-${isLast ? '3' : '1'}"

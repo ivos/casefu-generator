@@ -1,6 +1,10 @@
 {
   "systemName": "Some system name",
   "sections": {
+    "Country": {
+      "type": "entity",
+      "name": "Country"
+    },
     "Customer": {
       "type": "entity",
       "name": "Customer"
@@ -24,6 +28,16 @@
   },
   "attributeToEntity": {},
   "entityAttributes": {
+    "Country": {
+      "code": {
+        "status": "NPK",
+        "dataType": "varchar(3)"
+      },
+      "name": {
+        "status": "M",
+        "dataType": "text"
+      }
+    },
     "Customer": {
       "id": {
         "status": "APK",
@@ -32,6 +46,10 @@
       "name": {
         "status": "M",
         "dataType": "text"
+      },
+      "country": {
+        "status": "FK",
+        "dataType": "[Country](#Country)"
       },
       "status": {
         "status": "S",

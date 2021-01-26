@@ -10,6 +10,7 @@ export default () =>
       <Nav className="mr-auto">
         <Nav.Link as={NavLink} to="/" exact>Home</Nav.Link>
         <NavDropdown id="nav-dropdown" title="Entities">
+          <NavDropdown.Item as={NavLink} to="/countries">Countries</NavDropdown.Item>
           <NavDropdown.Item as={NavLink} to="/customers">Customers</NavDropdown.Item>
           <NavDropdown.Item as={NavLink} to="/orders">Orders</NavDropdown.Item>
           <NavDropdown.Item as={NavLink} to="/branches">Branches</NavDropdown.Item>

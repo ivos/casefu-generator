@@ -8,6 +8,7 @@ import {
   delay,
   editSWROptions,
   exactMatch,
+  expand,
   getEntity,
   list,
   modify,
@@ -15,6 +16,7 @@ import {
   optionalGet,
   update
 } from '../../api'
+import { collapse, restore } from '../../shared/utils'
 
 const pageSize = defaultPageSize
 const sort = data => {
@@ -24,13 +26,16 @@ const sort = data => {
 update(data => ({ ...data, customers: data.customers || [] }))
 
 const expandCustomer = values => {
+  values = expand(values, 'countryCode', 'country', 'countries')
   return values
 }
 
 export const customerToApi = values => {
+  values = collapse(values, 'country', 'code', 'countryCode')
   return values
 }
 export const customerFromApi = values => {
+  values = restore(values, 'countryCode', 'country', 'code')
   return values
 }
 
@@ -39,6 +44,7 @@ export const listCustomers = params => {
     item =>
       numberMatch(params, item, 'id') &&
       caseInsensitiveMatch(params, item, 'name') &&
+      caseInsensitiveMatch(params, item, 'countryCode') &&
       exactMatch(params, item, 'status')
   )
     .map(expandCustomer)
