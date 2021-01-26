@@ -101,8 +101,13 @@ const patch = (data, patch, wrapAction) => async () => {
 }
 ` : ''
 
-  const buttonsFnArgs = hasStatusEnum(meta, entityCode) ? `data, { isValidating, isChanging, wrapAction }` : ''
-  // TODO: needs data also for navigation buttons / toOneTargets
+  let buttonsFnArgs = ``
+  if (hasStatusEnum(meta, entityCode) || isToOneTarget(meta, entityCode)) {
+    buttonsFnArgs += `data`
+  }
+  if (hasStatusEnum(meta, entityCode)) {
+    buttonsFnArgs += `, { isValidating, isChanging, wrapAction }`
+  }
 
   const actionButton = ({ code, label, isLast }) => `
           <SavingButton variant="warning" className="mr-${isLast ? '3' : '1'}"

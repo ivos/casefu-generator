@@ -9,7 +9,7 @@ export default () =>
     rows={2}
     useResourceGet={useCountry}
     buttons={
-      () =>
+      (data) =>
         <>
           <EditButton className="mr-3" autoFocus/>
 
