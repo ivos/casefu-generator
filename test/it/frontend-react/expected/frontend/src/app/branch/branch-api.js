@@ -7,6 +7,7 @@ import {
   defaultSWROptions,
   delay,
   editSWROptions,
+  exactMatch,
   getEntity,
   list,
   modify,
@@ -40,6 +41,7 @@ export const listBranches = params => {
       caseInsensitiveMatch(params, item, 'street') &&
       caseInsensitiveMatch(params, item, 'city') &&
       caseInsensitiveMatch(params, item, 'zipCode') &&
+      exactMatch(params, item, 'type') &&
       caseInsensitiveMatch(params, item, 'note')
   )
     .map(expandBranch)

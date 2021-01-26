@@ -2,6 +2,7 @@ import React from 'react'
 import { Form } from 'react-bootstrap'
 import * as Yup from 'yup'
 import { CreateScreen, FieldGroup } from '../../shared'
+import PersonSexSelect from './PersonSexSelect'
 import { createPerson } from './person-api'
 
 export default () =>

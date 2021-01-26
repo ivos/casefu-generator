@@ -95,6 +95,10 @@
         "status": "O",
         "dataType": "text"
       },
+      "type": {
+        "status": "M",
+        "dataType": "enum: delivery, invoicing"
+      },
       "note": {
         "status": null,
         "dataType": ""

@@ -4,18 +4,20 @@ const {
   isToOne,
   isNotNull,
   isEnum,
+  isStatus,
   isDate,
   isDateTime,
   extractEntityCodeFromRef,
   ownAttributeEntries,
   filterToOne,
+  filterEnum,
   hasDate,
   hasDateTime
 } = require('../../meta/entity')
 const { pkg, url, label, labelLower, codeUpper } = require('./shared')
 
 const generateEdit = (meta, targetDir, entityCode) => {
-  const attributeEntrires =
+  const attributeEntries =
     ownAttributeEntries(meta, entityCode)
       .filter(([_, { status }]) => !['APK', 'S', 'V'].includes(status))
 
@@ -29,7 +31,7 @@ const generateEdit = (meta, targetDir, entityCode) => {
     return result
   }
   const validationSchemaDefs =
-    attributeEntrires
+    attributeEntries
       .map(attributeEntry => {
         const [attributeCode] = attributeEntry
         let type = 'string()'
@@ -57,7 +59,7 @@ const generateEdit = (meta, targetDir, entityCode) => {
     return result
   }
   const fields =
-    attributeEntrires
+    attributeEntries
       .map((attributeEntry, index) => {
         const [attributeCode, { dataType }] = attributeEntry
         let control = 'Form.Control'
@@ -101,6 +103,11 @@ import * as Yup from 'yup'
       const referredEntityCode = extractEntityCodeFromRef(dataType)
       return `import { ${referredEntityCode}Select } from '../${pkg(referredEntityCode)}/${referredEntityCode}Selects'\n`
     })
+    .join('')
+  imports += filterEnum(meta, entityCode)
+    .filter(attributeEntry => !isStatus(attributeEntry))
+    .map(([attributeCode]) => `${entityCode}${codeUpper(attributeCode)}Select`)
+    .map(name => `import ${name} from './${name}'\n`)
     .join('')
   imports += `import { update${entityCode}, use${entityCode}Edit } from './${pkg(entityCode)}-api'\n`
 

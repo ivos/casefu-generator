@@ -3,6 +3,7 @@ import { Form } from 'react-bootstrap'
 import * as Yup from 'yup'
 import { CreateScreen, DateTimePicker, FieldGroup } from '../../shared'
 import { LocationSelect } from '../location/LocationSelects'
+import EventStatusSelect from './EventStatusSelect'
 import { createEvent } from './event-api'
 
 export default () =>
