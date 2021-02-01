@@ -61,7 +61,7 @@ export default () =>
         <td>{item.givenNames}</td>
         <td>{item.userName}</td>
         <td>{item.email}</td>
-        <td>{sentenceCase(item.sex)}</td>
+        <td>{sentenceCase(item.sex || '')}</td>
       </>
     }
   />

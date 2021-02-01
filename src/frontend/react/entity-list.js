@@ -44,7 +44,7 @@ const generateList = (meta, targetDir, entityCode) => {
           }
         }
         if (isEnum(attributeEntry)) {
-          content = `sentenceCase(${content})`
+          content = `sentenceCase(${content} || '')`
         }
         if (isDate(attributeEntry)) {
           content = `formatDate(${content})`

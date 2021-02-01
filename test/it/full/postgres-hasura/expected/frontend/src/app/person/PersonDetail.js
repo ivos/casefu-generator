@@ -23,7 +23,7 @@ export default () =>
         <StaticGroup label="Given names" sm={[2, 10]} value={data.givenNames}/>
         <StaticGroup label="User name" sm={[2, 10]} value={data.userName}/>
         <StaticGroup label="Email" sm={[2, 10]} value={data.email}/>
-        <StaticGroup label="Sex" sm={[2, 10]} value={sentenceCase(data.sex)}/>
+        <StaticGroup label="Sex" sm={[2, 10]} value={sentenceCase(data.sex || '')}/>
       </>
     }
   </DetailScreen>

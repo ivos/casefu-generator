@@ -50,7 +50,7 @@ export default () =>
         <td>{item.id}</td>
         <td>{item.name}</td>
         <td>{item.country?.name}</td>
-        <td>{sentenceCase(item.status)}</td>
+        <td>{sentenceCase(item.status || '')}</td>
       </>
     }
   />

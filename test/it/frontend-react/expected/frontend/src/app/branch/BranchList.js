@@ -56,7 +56,7 @@ export default () =>
         <td>{item.street}</td>
         <td>{item.city}</td>
         <td>{item.zipCode}</td>
-        <td>{sentenceCase(item.type)}</td>
+        <td>{sentenceCase(item.type || '')}</td>
         <td>{item.note}</td>
       </>
     }

@@ -43,7 +43,7 @@ export default () =>
             {data.country?.name}
           </Link>
         </StaticGroup>
-        <StaticGroup label="Status" sm={[2, 10]} value={sentenceCase(data.status)}/>
+        <StaticGroup label="Status" sm={[2, 10]} value={sentenceCase(data.status || '')}/>
       </>
     }
   </DetailScreen>

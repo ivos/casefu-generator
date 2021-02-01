@@ -21,7 +21,7 @@ export default () =>
         <StaticGroup label="Street" sm={[2, 10]} value={data.street}/>
         <StaticGroup label="City" sm={[2, 10]} value={data.city}/>
         <StaticGroup label="Zip code" sm={[2, 10]} value={data.zipCode}/>
-        <StaticGroup label="Type" sm={[2, 10]} value={sentenceCase(data.type)}/>
+        <StaticGroup label="Type" sm={[2, 10]} value={sentenceCase(data.type || '')}/>
         <StaticGroup label="Note" sm={[2, 10]} value={data.note}/>
       </>
     }

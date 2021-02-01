@@ -51,7 +51,7 @@ export default () =>
       item => <>
         <td>{item.id}</td>
         <td>{formatDateTime(item.time)}</td>
-        <td>{sentenceCase(item.status)}</td>
+        <td>{sentenceCase(item.status || '')}</td>
         <td>{item.location?.name}</td>
       </>
     }

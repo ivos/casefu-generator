@@ -5,7 +5,7 @@ const { pascalCase } = require('change-case')
 const generateLocalStorageJs = (meta, targetDir) => {
   console.log('- Generating React "local-storage.js"')
 
-  const localStorageKey = 'CaseFuGeneratorAppData' + ((meta.systemName && pascalCase(meta.systemName)) || '')
+  const localStorageKey = 'CaseFuGeneratorAppData' + pascalCase(meta.systemName || '')
 
   const content = `const localStorageKey = '${localStorageKey}'
 

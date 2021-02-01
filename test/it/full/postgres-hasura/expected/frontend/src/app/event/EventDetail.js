@@ -21,7 +21,7 @@ export default () =>
       <>
         <StaticGroup label="Id" sm={[2, 10]} value={data.id}/>
         <StaticGroup label="Time" sm={[2, 10]} value={formatDateTime(data.time)}/>
-        <StaticGroup label="Status" sm={[2, 10]} value={sentenceCase(data.status)}/>
+        <StaticGroup label="Status" sm={[2, 10]} value={sentenceCase(data.status || '')}/>
         <StaticGroup label="Location" sm={[2, 10]}>
           <Link to={`/locations/${data.location?.id}`}>
             {data.location?.name}

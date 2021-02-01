@@ -38,7 +38,7 @@ const generateDetail = (meta, targetDir, entityCode) => {
         let value = `data.${attributeCode}`
         let children = null
         if (isEnum(attributeEntry)) {
-          value = `sentenceCase(${value})`
+          value = `sentenceCase(${value} || '')`
         }
         if (isDate(attributeEntry)) {
           value = `formatDate(${value})`

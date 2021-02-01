@@ -62,7 +62,7 @@ export default () =>
         <td>{item.id}</td>
         <td>{item.orderNumber}</td>
         <td>{item.customer?.name}</td>
-        <td>{sentenceCase(item.status)}</td>
+        <td>{sentenceCase(item.status || '')}</td>
         <td>{formatDateTime(item.received)}</td>
         <td>{formatDate(item.deliveryDate)}</td>
         <td>{item.note}</td>

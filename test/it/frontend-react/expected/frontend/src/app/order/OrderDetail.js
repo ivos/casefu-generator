@@ -46,7 +46,7 @@ export default () =>
             {data.customer?.name}
           </Link>
         </StaticGroup>
-        <StaticGroup label="Status" sm={[2, 10]} value={sentenceCase(data.status)}/>
+        <StaticGroup label="Status" sm={[2, 10]} value={sentenceCase(data.status || '')}/>
         <StaticGroup label="Received" sm={[2, 10]} value={formatDateTime(data.received)}/>
         <StaticGroup label="Delivery date" sm={[2, 10]} value={formatDate(data.deliveryDate)}/>
         <StaticGroup label="Note" sm={[2, 10]} value={data.note}/>
