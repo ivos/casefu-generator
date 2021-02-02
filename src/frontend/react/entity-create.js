@@ -62,7 +62,7 @@ const generateCreate = (meta, targetDir, entityCode) => {
     if (isFirst) {
       result += ' autoFocus'
     }
-    result += `/>`
+    result += '/>'
     return result
   }
   const fields =
@@ -97,14 +97,14 @@ const generateCreate = (meta, targetDir, entityCode) => {
 import { Form } from 'react-bootstrap'
 import * as Yup from 'yup'
 `
-  imports += `import { CreateScreen,`
+  imports += 'import { CreateScreen,'
   if (hasDate(meta, entityCode)) {
-    imports += ` DatePicker,`
+    imports += ' DatePicker,'
   }
   if (hasDateTime(meta, entityCode)) {
-    imports += ` DateTimePicker,`
+    imports += ' DateTimePicker,'
   }
-  imports += ` FieldGroup } from '../../shared'\n`
+  imports += ' FieldGroup } from \'../../shared\'\n'
   imports += filterToOne(meta, entityCode)
     .map(([, { dataType }]) => {
       const referredEntityCode = extractEntityCodeFromRef(dataType)

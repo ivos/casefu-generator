@@ -26,7 +26,8 @@ const { pkg, url, label, labelPlural, codeLower } = require('./shared')
 
 const generateDetail = (meta, targetDir, entityCode) => {
   const field = ({ label, value, children }) =>
-    children ? `
+    children
+      ? `
         <StaticGroup label="${label}" sm={[2, 10]}>${children}
         </StaticGroup>`
       : `
@@ -65,26 +66,26 @@ const generateDetail = (meta, targetDir, entityCode) => {
   let imports = `import React from 'react'
 `
   if (hasToOne(meta, entityCode)) {
-    imports += `import { Link } from 'react-router-dom'\n`
+    imports += 'import { Link } from \'react-router-dom\'\n'
   }
-  imports += `import { DetailScreen, EditButton,`
+  imports += 'import { DetailScreen, EditButton,'
   if (isToOneTarget(meta, entityCode)) {
-    imports += ` NavigationButton,`
+    imports += ' NavigationButton,'
   }
   if (hasStatusEnum(meta, entityCode)) {
-    imports += ` SavingButton,`
+    imports += ' SavingButton,'
   }
-  imports += ` StaticGroup } from '../../shared'\n`
+  imports += ' StaticGroup } from \'../../shared\'\n'
   if (hasEnum(meta, entityCode)) {
-    imports += `import { sentenceCase } from 'change-case'\n`
+    imports += 'import { sentenceCase } from \'change-case\'\n'
   }
-  imports += `import {`
+  imports += 'import {'
   if (hasStatusEnum(meta, entityCode)) {
     imports += ` patch${entityCode},`
   }
   imports += ` use${entityCode} } from './${pkg(entityCode)}-api'\n`
   if (hasTemporal(meta, entityCode)) {
-    imports += `import { `
+    imports += 'import { '
     const items = []
     if (hasDate(meta, entityCode)) {
       items.push('formatDate')
@@ -92,21 +93,23 @@ const generateDetail = (meta, targetDir, entityCode) => {
     if (hasDateTime(meta, entityCode)) {
       items.push('formatDateTime')
     }
-    imports += items.join(', ') + ` } from '../../i18n'\n`
+    imports += items.join(', ') + ' } from \'../../i18n\'\n'
   }
 
-  const patch = hasStatusEnum(meta, entityCode) ? `
+  const patch = hasStatusEnum(meta, entityCode)
+    ? `
 const patch = (data, patch, wrapAction) => async () => {
   await wrapAction(() => patch${entityCode}(data.id, data.version, patch))
 }
-` : ''
+`
+    : ''
 
-  let buttonsFnArgs = ``
+  let buttonsFnArgs = ''
   if (hasStatusEnum(meta, entityCode) || isToOneTarget(meta, entityCode)) {
-    buttonsFnArgs += `data`
+    buttonsFnArgs += 'data'
   }
   if (hasStatusEnum(meta, entityCode)) {
-    buttonsFnArgs += `, { isValidating, isChanging, wrapAction }`
+    buttonsFnArgs += ', { isValidating, isChanging, wrapAction }'
   }
 
   const actionButton = ({ code, label, isLast }) => `

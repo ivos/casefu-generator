@@ -55,7 +55,7 @@ const generateEdit = (meta, targetDir, entityCode) => {
     if (isFirst) {
       result += ' autoFocus'
     }
-    result += `/>`
+    result += '/>'
     return result
   }
   const fields =
@@ -90,14 +90,14 @@ const generateEdit = (meta, targetDir, entityCode) => {
 import { Form } from 'react-bootstrap'
 import * as Yup from 'yup'
 `
-  imports += `import {`
+  imports += 'import {'
   if (hasDate(meta, entityCode)) {
-    imports += ` DatePicker,`
+    imports += ' DatePicker,'
   }
   if (hasDateTime(meta, entityCode)) {
-    imports += ` DateTimePicker,`
+    imports += ' DateTimePicker,'
   }
-  imports += ` EditScreen, FieldGroup } from '../../shared'\n`
+  imports += ' EditScreen, FieldGroup } from \'../../shared\'\n'
   imports += filterToOne(meta, entityCode)
     .map(([, { dataType }]) => {
       const referredEntityCode = extractEntityCodeFromRef(dataType)

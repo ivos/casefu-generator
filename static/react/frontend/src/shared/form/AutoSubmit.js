@@ -9,15 +9,15 @@ export default () => {
   const [prevValues, setPrevValues] = useState()
 
   useDebounce(async () => {
-      if (!isDeepEqual(values, prevValues)) {
-        setPrevValues(values)
-        if (prevValues !== undefined) {
-          await submitForm()
-        }
+    if (!isDeepEqual(values, prevValues)) {
+      setPrevValues(values)
+      if (prevValues !== undefined) {
+        await submitForm()
       }
-    },
-    typingDebounceDelay,
-    [values])
+    }
+  },
+  typingDebounceDelay,
+  [values])
 
   return null
 }

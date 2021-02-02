@@ -1,4 +1,4 @@
-import { format } from "date-fns"
+import { format } from 'date-fns'
 import { cs, de } from 'date-fns/locale'
 import { setLocale as yupSetLocale } from 'yup'
 import { registerLocale } from 'react-datepicker'

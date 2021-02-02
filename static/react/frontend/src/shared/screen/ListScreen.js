@@ -49,25 +49,25 @@ export default (
 
       <Table bordered hover>
         <thead>
-        <tr>
-          {tableHeader}
-        </tr>
+          <tr>
+            {tableHeader}
+          </tr>
         </thead>
         <tbody>
-        {
-          [...Array(pagesCount)]
-            .map((_, index) =>
-              <Suspense fallback={<SkeletonTableRows columns={columns}/>}
-                        key={`page-${index}`}>
-                <TablePage searchValues={emptyValuesToNulls(toApi(searchValues))}
-                           $page={index}
-                           setLastPage={setLastPage}
-                           url={url}
-                           useResourceList={useResourceList}
-                           children={tablePageContent}/>
-              </Suspense>
-            )
-        }
+          {
+            [...Array(pagesCount)]
+              .map((_, index) =>
+                <Suspense fallback={<SkeletonTableRows columns={columns}/>}
+                          key={`page-${index}`}>
+                  <TablePage searchValues={emptyValuesToNulls(toApi(searchValues))}
+                             $page={index}
+                             setLastPage={setLastPage}
+                             url={url}
+                             useResourceList={useResourceList}
+                             children={tablePageContent}/>
+                </Suspense>
+              )
+          }
         </tbody>
       </Table>
 

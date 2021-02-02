@@ -84,24 +84,24 @@ import {`
     imports += `
 import {`
     if (hasToOne(meta, entityCode)) {
-      imports += ` collapse,`
+      imports += ' collapse,'
     }
     if (hasDateTime(meta, entityCode)) {
-      imports += ` dateTimeToApi,`
+      imports += ' dateTimeToApi,'
     }
     if (hasDate(meta, entityCode)) {
-      imports += ` dateToApi,`
+      imports += ' dateToApi,'
     }
     if (hasToOne(meta, entityCode)) {
-      imports += ` restore`
+      imports += ' restore'
     }
     if (hasToOne(meta, entityCode) && hasTemporal(meta, entityCode)) {
-      imports += `,`
+      imports += ','
     }
     if (hasTemporal(meta, entityCode)) {
-      imports += ` temporalFromApi`
+      imports += ' temporalFromApi'
     }
-    imports += ` } from '../../shared/utils'`
+    imports += ' } from \'../../shared/utils\''
   }
 
   const expandAttribute = ({ from, to, key }) => `
@@ -122,7 +122,7 @@ import {`
   return values
 }`
 
-  let toApiValues = ``
+  let toApiValues = ''
   const temporalToApi = ({ fn, attributeCode }) => `
   values = ${fn}('${attributeCode}', values)
   values = ${fn}('${attributeCode}From', values)
@@ -159,8 +159,8 @@ import {`
       .map(collapse)
       .join('')
 
-  let fromApiValues = ``
-  const temporalFromApi = ({ fn, attributeCode }) => `
+  let fromApiValues = ''
+  const temporalFromApi = ({ attributeCode }) => `
   values = temporalFromApi('${attributeCode}', values)
   values = temporalFromApi('${attributeCode}From', values)
   values = temporalFromApi('${attributeCode}To', values)`
@@ -185,7 +185,7 @@ import {`
       .map(restore)
       .join('')
 
-  const searchItemsSeparator = ` &&\n      `
+  const searchItemsSeparator = ' &&\n      '
   const searchItem = attributeEntry => {
     const [attributeCode, { dataType }] = attributeEntry
     if (isToOne(attributeEntry)) {

@@ -19,8 +19,9 @@ const wrapSubmit = (onSubmit, mapServerErrorCodeToLabel) => async (values, formi
   } catch (error) {
     if (isValidationError(error)) {
       const { errors: serverErrors } = error.response.data
-      const errors = mapServerErrorCodeToLabel ?
-        mapServerErrorCodesToLabels(mapServerErrorCodeToLabel, serverErrors) : serverErrors
+      const errors = mapServerErrorCodeToLabel
+        ? mapServerErrorCodesToLabels(mapServerErrorCodeToLabel, serverErrors)
+        : serverErrors
       formikBag.setStatus({ changed: {}, serverErrors: errors })
       return
     }

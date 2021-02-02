@@ -107,16 +107,16 @@ const generateList = (meta, targetDir, entityCode) => {
 import { Form } from 'react-bootstrap'
 `
   if (hasEnum(meta, entityCode)) {
-    imports += `import { sentenceCase } from 'change-case'\n`
+    imports += 'import { sentenceCase } from \'change-case\'\n'
   }
-  imports += `import { CreateButton,`
+  imports += 'import { CreateButton,'
   if (hasDate(meta, entityCode)) {
-    imports += ` DateRangePicker,`
+    imports += ' DateRangePicker,'
   }
   if (hasDateTime(meta, entityCode)) {
-    imports += ` DateTimeRangePicker,`
+    imports += ' DateTimeRangePicker,'
   }
-  imports += ` FieldGroup, ListScreen } from '../../shared'\n`
+  imports += ' FieldGroup, ListScreen } from \'../../shared\'\n'
   imports += filterToOne(meta, entityCode)
     .map(([, { dataType }]) => {
       const referredEntityCode = extractEntityCodeFromRef(dataType)
@@ -130,7 +130,7 @@ import { Form } from 'react-bootstrap'
   imports += `import { ${codeLower(entityCode)}FromApi, ${codeLower(entityCode)}ToApi, use${codePlural(entityCode)} }` +
     ` from './${pkg(entityCode)}-api'\n`
   if (hasTemporal(meta, entityCode)) {
-    imports += `import { `
+    imports += 'import { '
     const items = []
     if (hasDate(meta, entityCode)) {
       items.push('formatDate')
@@ -138,7 +138,7 @@ import { Form } from 'react-bootstrap'
     if (hasDateTime(meta, entityCode)) {
       items.push('formatDateTime')
     }
-    imports += items.join(', ') + ` } from '../../i18n'\n`
+    imports += items.join(', ') + ' } from \'../../i18n\'\n'
   }
 
   const content = `${imports}
