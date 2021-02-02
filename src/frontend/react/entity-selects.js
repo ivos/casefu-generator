@@ -7,7 +7,11 @@ const {
 const { pkg, codeUpper, codePlural } = require('./shared')
 
 const generateSelects = (meta, targetDir, entityCode) => {
-  const [labelAttributeCode] = referredLabelAttribute(meta, entityCode)
+  const attributeEntry = referredLabelAttribute(meta, entityCode)
+  const [attributeCode, { dataType }] = attributeEntry
+  if (isToOne(attributeEntry)) {
+
+  }
 
   const content = `import React from 'react'
 import { AsyncSelect } from '../../shared'
