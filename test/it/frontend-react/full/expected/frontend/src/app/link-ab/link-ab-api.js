@@ -18,7 +18,7 @@ import { collapse, restore } from '../../shared/utils'
 
 const pageSize = defaultPageSize
 const sort = data => {
-  data.sort((a, b) => a.masterFirst.localeCompare(b.masterFirst))
+  data.sort((a, b) => String(a.masterFirst?.code).localeCompare(String(b.masterFirst?.code)))
 }
 
 update(data => ({ ...data, linkAbs: data.linkAbs || [] }))

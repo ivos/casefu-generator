@@ -25,8 +25,17 @@ const {
 } = require('../../meta/entity')
 const { pkg, url, codeLower, codeUpper, codePlural, codePluralLower } = require('./shared')
 
+const getSortExpression = (meta, entityCode) => {
+  const [attributeCode, { dataType }] = referredLabelAttribute(meta, entityCode)
+  const referredEntityCode = extractEntityCodeFromRef(dataType)
+  if (referredEntityCode !== dataType) {
+    return attributeCode + '?.' + getSortExpression(meta, referredEntityCode)
+  }
+  return attributeCode
+}
+
 const generateApi = (meta, targetDir, entityCode) => {
-  const [labelAttributeCode] = referredLabelAttribute(meta, entityCode)
+  const sortExpression = getSortExpression(meta, entityCode)
 
   let imports = `import useSWR from 'swr'
 import qs from 'qs'
@@ -211,7 +220,7 @@ import {`
 
 const pageSize = defaultPageSize
 const sort = data => {
-  data.sort((a, b) => a.${labelAttributeCode}.localeCompare(b.${labelAttributeCode}))
+  data.sort((a, b) => String(a.${sortExpression}).localeCompare(String(b.${sortExpression})))
 }
 
 update(data => ({ ...data, ${codePluralLower(entityCode)}: data.${codePluralLower(entityCode)} || [] }))

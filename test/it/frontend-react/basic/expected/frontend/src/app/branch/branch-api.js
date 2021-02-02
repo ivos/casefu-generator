@@ -18,7 +18,7 @@ import {
 
 const pageSize = defaultPageSize
 const sort = data => {
-  data.sort((a, b) => a.street.localeCompare(b.street))
+  data.sort((a, b) => String(a.street).localeCompare(String(b.street)))
 }
 
 update(data => ({ ...data, branches: data.branches || [] }))

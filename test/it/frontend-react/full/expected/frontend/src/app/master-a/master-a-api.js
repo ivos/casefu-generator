@@ -17,7 +17,7 @@ import {
 
 const pageSize = defaultPageSize
 const sort = data => {
-  data.sort((a, b) => a.code.localeCompare(b.code))
+  data.sort((a, b) => String(a.code).localeCompare(String(b.code)))
 }
 
 update(data => ({ ...data, masterAs: data.masterAs || [] }))

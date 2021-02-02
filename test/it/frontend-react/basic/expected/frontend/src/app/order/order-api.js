@@ -22,7 +22,7 @@ import { collapse, dateTimeToApi, dateToApi, restore, temporalFromApi } from '..
 
 const pageSize = defaultPageSize
 const sort = data => {
-  data.sort((a, b) => a.orderNumber.localeCompare(b.orderNumber))
+  data.sort((a, b) => String(a.orderNumber).localeCompare(String(b.orderNumber)))
 }
 
 update(data => ({ ...data, orders: data.orders || [] }))

@@ -21,7 +21,7 @@ import { collapse, dateTimeToApi, restore, temporalFromApi } from '../../shared/
 
 const pageSize = defaultPageSize
 const sort = data => {
-  data.sort((a, b) => a.time.localeCompare(b.time))
+  data.sort((a, b) => String(a.time).localeCompare(String(b.time)))
 }
 
 update(data => ({ ...data, events: data.events || [] }))
