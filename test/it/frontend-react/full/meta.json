@@ -1,0 +1,100 @@
+{
+  "sections": {
+    "MasterA": {
+      "type": "entity",
+      "name": "Master a"
+    },
+    "MasterB": {
+      "type": "entity",
+      "name": "Master b"
+    },
+    "DetailA": {
+      "type": "entity",
+      "name": "Detail a"
+    },
+    "DetailB": {
+      "type": "entity",
+      "name": "Detail b"
+    },
+    "LinkAB": {
+      "type": "entity",
+      "name": "Link a b"
+    }
+  },
+  "entityAttributes": {
+    "MasterA": {
+      "code": {
+        "status": "M",
+        "dataType": "text"
+      },
+      "name": {
+        "status": "M",
+        "dataType": "text"
+      }
+    },
+    "MasterB": {
+      "id": {
+        "status": "APK",
+        "dataType": "bigserial"
+      },
+      "name": {
+        "status": "M",
+        "dataType": "text"
+      }
+    },
+    "DetailA": {
+      "code": {
+        "status": "M",
+        "dataType": "text"
+      },
+      "name": {
+        "status": "M",
+        "dataType": "text"
+      },
+      "master": {
+        "status": "n : 1",
+        "dataType": "`#MasterA`"
+      }
+    },
+    "DetailB": {
+      "id": {
+        "status": "APK",
+        "dataType": "bigserial"
+      },
+      "name": {
+        "status": "M",
+        "dataType": "text"
+      },
+      "masterA1": {
+        "status": "0..n : 0..1",
+        "dataType": "`#MasterA`"
+      },
+      "masterA2": {
+        "status": "n : 1",
+        "dataType": "`#MasterA`"
+      },
+      "masterB1": {
+        "status": "OFK",
+        "dataType": "`#MasterB`"
+      },
+      "masterB2": {
+        "status": "FK",
+        "dataType": "`#MasterB`"
+      }
+    },
+    "LinkAB": {
+      "masterFirst": {
+        "status": "n : 1",
+        "dataType": "`#MasterA`"
+      },
+      "masterSecond": {
+        "status": "n : 1",
+        "dataType": "`#MasterB`"
+      }
+    }
+  },
+  "attributeToEntity": {},
+  "references": {},
+  "backReferences": {},
+  "errors": []
+}

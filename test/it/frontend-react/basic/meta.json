@@ -18,15 +18,6 @@
       "name": "Branch"
     }
   },
-  "references": {
-    "Order": [
-      "Customer"
-    ],
-    "Branch": [
-      "Customer"
-    ]
-  },
-  "attributeToEntity": {},
   "entityAttributes": {
     "Country": {
       "code": {
@@ -105,6 +96,8 @@
       }
     }
   },
-  "errors": [],
-  "backReferences": {}
+  "attributeToEntity": {},
+  "references": {},
+  "backReferences": {},
+  "errors": []
 }
