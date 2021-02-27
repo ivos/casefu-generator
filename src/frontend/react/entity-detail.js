@@ -9,7 +9,7 @@ const {
   isDateTime,
   extractEntityCodeFromRef,
   explicitPKAttEntry,
-  ownAttributeEntries,
+  userAttributeEntries,
   referredLabelAttribute,
   enumValues,
   hasToOne,
@@ -33,7 +33,7 @@ const generateDetail = (meta, targetDir, entityCode) => {
       : `
         <StaticGroup label="${label}" sm={[2, 10]} value={${value}}/>`
   const fields =
-    ownAttributeEntries(meta, entityCode)
+    userAttributeEntries(meta, entityCode)
       .map(attributeEntry => {
         const [attributeCode, { dataType }] = attributeEntry
         let value = `data.${attributeCode}`

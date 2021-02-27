@@ -7,7 +7,7 @@ const {
   isNumber,
   extractEntityCodeFromRef,
   getPKDataTypeForFK,
-  ownAttributeEntries,
+  userAttributeEntries,
   referredLabelAttribute,
   enumValues,
   filterToOne,
@@ -47,7 +47,7 @@ import {`
   atMost,`
   }
   const hasUnspecificOwnAtts =
-    ownAttributeEntries(meta, entityCode, 'bigint')
+    userAttributeEntries(meta, entityCode)
       .filter(attributeEntry =>
         !isToOne(attributeEntry) && !isEnum(attributeEntry) && !isNumber(attributeEntry) && !isTemporal(attributeEntry))
       .length > 0
@@ -209,7 +209,7 @@ import {`
     return `caseInsensitiveMatch(params, item, '${attributeCode}')`
   }
   const searchItems =
-    ownAttributeEntries(meta, entityCode, 'bigint')
+    userAttributeEntries(meta, entityCode)
       .map(searchItem)
 
   const createFields =

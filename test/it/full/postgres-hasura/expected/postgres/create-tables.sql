@@ -10,7 +10,8 @@ create table people
     given_names varchar(30),
     user_name text not null,
     email text,
-    sex text
+    sex text,
+    version bigint not null
 );
 create unique index ui_people__user_name on people (user_name);
 create unique index ui_people__email on people (email);
@@ -21,6 +22,7 @@ alter table people
 create table locations
 (
     id bigserial primary key,
+    version bigint not null,
     name text
 );
 
@@ -28,6 +30,7 @@ create table locations
 create table events
 (
     id bigserial primary key,
+    version bigint not null,
     time timestamp not null,
     status text not null,
     location_id bigint not null

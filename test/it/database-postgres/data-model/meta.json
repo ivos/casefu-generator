@@ -75,9 +75,13 @@
   },
   "entityAttributes": {
     "Person": {
-      "id": {
+      "customId": {
         "status": "APK",
-        "dataType": "bigserial"
+        "dataType": "serial"
+      },
+      "customVersion": {
+        "status": "V",
+        "dataType": "int"
       },
       "personalNumber": {
         "status": "NK",
@@ -153,6 +157,10 @@
       }
     },
     "Event": {
+      "customVersion": {
+        "status": "V",
+        "dataType": "int"
+      },
       "time": {
         "status": "M",
         "dataType": "timestamp"

@@ -14,6 +14,7 @@ const normalizeRelationStatus = status =>
     .replace(/0..n/g, 'n')
     .replace(/1..1/g, '1')
 const isPrimaryKey = ([_, { status }]) => ['APK', 'NPK', 'FPK', 'PK'].includes(status)
+const isVersion = ([_, { status }]) => ['V'].includes(status)
 const isToOne = ([_, { status }]) =>
   ['FPK', 'FK', 'OFK'].includes(status) ||
   ['1', '0..1'].includes(normalizeRelationStatus(status).split(' : ')[1])
@@ -86,19 +87,27 @@ const ownAttributeEntries = (meta, entityCode, defaultPKDataType) => {
   const explicit = attributeEntries(meta, entityCode)
     .filter(isOwnAttribute)
   const hasPrimaryKey = explicit.filter(isPrimaryKey).length > 0
+  const hasVersion = explicit.filter(isVersion).length > 0
   const before = []
+  const after = []
   if (!hasPrimaryKey) {
     before.push(['id', { status: 'APK', dataType: defaultPKDataType }])
+    if (!hasVersion) {
+      before.push(['version', { status: 'V', dataType: 'bigint' }])
+    }
+  } else if (!hasVersion) {
+    after.push(['version', { status: 'V', dataType: 'bigint' }])
   }
-  return before.concat(explicit)
+  return before.concat(explicit, after)
 }
 
-const userAttributes = (meta, entityCode) =>
-  ownAttributeEntries(meta, entityCode)
-    .filter(attributeEntry => !isPrimaryKey(attributeEntry))
+const userAttributeEntries = (meta, entityCode) =>
+  ownAttributeEntries(meta, entityCode, 'bigint')
+    .filter(attributeEntry => !isVersion(attributeEntry))
 
 const referredLabelAttribute = (meta, entityCode) => {
-  const userAttrs = userAttributes(meta, entityCode)
+  const userAttrs = userAttributeEntries(meta, entityCode)
+    .filter(attributeEntry => !isPrimaryKey(attributeEntry))
   return userAttrs.length > 0 ? userAttrs[0] : []
 }
 
@@ -112,7 +121,7 @@ const enumValues = ({ dataType }) => {
 }
 
 const filterAttributes = predicate => (meta, entityCode) =>
-  ownAttributeEntries(meta, entityCode, 'bigint')
+  userAttributeEntries(meta, entityCode, 'bigint')
     .filter(predicate)
 const filterToOne = filterAttributes(isToOne)
 const filterEnum = filterAttributes(isEnum)
@@ -149,6 +158,7 @@ module.exports = {
   entityCodes,
   attributeEntries,
   isPrimaryKey,
+  isVersion,
   isToOne,
   isUnique,
   isNotNull,
@@ -163,6 +173,7 @@ module.exports = {
   explicitPKAttEntry,
   getPKDataTypeForFK,
   ownAttributeEntries,
+  userAttributeEntries,
   referredLabelAttribute,
   enumValues,
   filterToOne,

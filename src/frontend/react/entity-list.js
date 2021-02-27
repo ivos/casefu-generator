@@ -6,7 +6,7 @@ const {
   isDate,
   isDateTime,
   extractEntityCodeFromRef,
-  ownAttributeEntries,
+  userAttributeEntries,
   referredLabelAttribute,
   filterToOne,
   filterEnum,
@@ -23,7 +23,7 @@ const generateList = (meta, targetDir, entityCode) => {
   const columnHeader = ({ label }) => `
         <th>${label}</th>`
   const columnHeaders =
-    ownAttributeEntries(meta, entityCode)
+    userAttributeEntries(meta, entityCode)
       .map(([attributeCode, _]) => ({
         label: label(attributeCode)
       }))
@@ -32,7 +32,7 @@ const generateList = (meta, targetDir, entityCode) => {
   const tableValue = ({ content }) => `
         <td>{${content}}</td>`
   const tableValues =
-    ownAttributeEntries(meta, entityCode)
+    userAttributeEntries(meta, entityCode)
       .map(attributeEntry => {
         const [attributeCode, { dataType }] = attributeEntry
         let content = `item.${attributeCode}`
@@ -59,7 +59,7 @@ const generateList = (meta, targetDir, entityCode) => {
 
   const initialValue = ({ attributeCode }) => `  ${attributeCode}: ''`
   const initialValues = () => {
-    const arrays = ownAttributeEntries(meta, entityCode)
+    const arrays = userAttributeEntries(meta, entityCode)
       .map(attributeEntry => {
         const [attributeCode] = attributeEntry
         if (isDate(attributeEntry) || isDateTime(attributeEntry)) {
@@ -78,7 +78,7 @@ const generateList = (meta, targetDir, entityCode) => {
   const searchField = ({ attributeCode, control, label }) => `
         <FieldGroup as={${control}} name="${attributeCode}" label="${label}" sm={[2, 9]} isValid={false}/>`
   const searchFields =
-    ownAttributeEntries(meta, entityCode)
+    userAttributeEntries(meta, entityCode)
       .map(attributeEntry => {
         const [attributeCode, { dataType }] = attributeEntry
         let control = 'Form.Control'
