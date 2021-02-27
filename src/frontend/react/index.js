@@ -1,5 +1,6 @@
 const fse = require('fs-extra')
 const path = require('path')
+const { generateIndexHtml } = require('./index-html')
 const { generateHeaderJs } = require('./header')
 const { generateAppJs } = require('./app')
 const { generateEntities } = require('./entity')
@@ -14,6 +15,7 @@ const copyStaticContent = (moduleDir, targetDir) => {
 
 const generateReact = (meta, moduleDir, targetDir) => {
   copyStaticContent(moduleDir, targetDir)
+  generateIndexHtml(meta, targetDir)
   generateHeaderJs(meta, targetDir)
   generateAppJs(meta, targetDir)
   generateEntities(meta, targetDir)
