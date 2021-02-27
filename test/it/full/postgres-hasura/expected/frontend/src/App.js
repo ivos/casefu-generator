@@ -3,6 +3,7 @@ import { HashRouter as Router, Route, Switch } from 'react-router-dom'
 import { Container } from 'react-bootstrap'
 import './App.css'
 import Header from './layout/Header'
+import Footer from './layout/Footer'
 import Home from './layout/Home'
 import PersonRouter from './app/person/PersonRouter'
 import LocationRouter from './app/location/LocationRouter'
@@ -26,5 +27,6 @@ export default () =>
           <Home/>
         </Route>
       </Switch>
+      <Footer/>
     </Container>
   </Router>
