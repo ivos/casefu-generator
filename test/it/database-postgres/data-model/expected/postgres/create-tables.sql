@@ -2,7 +2,6 @@
 ---------
 
 -- Entity: Person
-create type people__sex as enum ('male', 'female');
 create table people
 (
     id bigserial primary key,
@@ -11,10 +10,12 @@ create table people
     given_names varchar(30),
     user_name text not null,
     email text,
-    sex people__sex
+    sex text
 );
 create unique index ui_people__user_name on people (user_name);
 create unique index ui_people__email on people (email);
+alter table people
+    add constraint ck_people__sex check ( sex in ('male', 'female') );
 
 -- Entity: Multiple word default code
 create table multiple_word_default_codes
@@ -54,16 +55,17 @@ create table empties
 );
 
 -- Entity: Event
-create type events__status as enum ('active', 'preApproved', 'disabled', 'multi_word');
 create table events
 (
     id bigserial primary key,
     time timestamp not null,
-    status events__status not null,
+    status text not null,
     location_id bigint not null,
     one_to_one_foreign_primary_key bigint not null,
     one_to_one_empty_id bigint
 );
+alter table events
+    add constraint ck_events__status check ( status in ('active', 'preApproved', 'disabled', 'multi_word') );
 
 
 -- Foreign keys

@@ -30,8 +30,6 @@ const getColumnName = (meta, attributeEntry) => {
   }
   return snakeCase(attributeCode)
 }
-const getEnumTypeName = (meta, entityCode, attributeEntry) =>
-  `${getTableName(entityCode)}__${getColumnName(meta, attributeEntry)}`
 
 const columnType = (meta, entityCode, attributeEntry) => {
   const [, attributeDef] = attributeEntry
@@ -41,7 +39,7 @@ const columnType = (meta, entityCode, attributeEntry) => {
     type = getPKDataTypeForFK(meta, referredEntityCode)
   }
   if (isEnum(attributeEntry)) {
-    type = `${getEnumTypeName(meta, entityCode, attributeEntry)}`
+    type = 'text'
   }
   if (isPrimaryKey(attributeEntry)) {
     return `${type} primary key`
@@ -88,28 +86,29 @@ const uniqueIndexes = (meta, entityCode) =>
     .map(uniqueIndex(meta, entityCode))
     .join('')
 
-const enumType = (meta, entityCode) => attributeEntry => {
+const enumConstraint = (meta, entityCode) => attributeEntry => {
   const [, attributeDef] = attributeEntry
-  const enumTypeName = getEnumTypeName(meta, entityCode, attributeEntry)
   const values = enumValues(attributeDef)
     .map(s => `'${s}'`)
     .join(', ')
-  return `\ncreate type ${enumTypeName} as enum (${values});`
+  return `\nalter table ${getTableName(entityCode)}
+    add constraint ck_${getTableName(entityCode)}__${getColumnName(meta, attributeEntry)}` +
+    ` check ( ${getColumnName(meta, attributeEntry)} in (${values}) );`
 }
 
-const enumTypes = (meta, entityCode) =>
+const enumConstraints = (meta, entityCode) =>
   attributeEntries(meta, entityCode)
     .filter(isEnum)
-    .map(enumType(meta, entityCode))
+    .map(enumConstraint(meta, entityCode))
     .join('')
 
 const createTable = meta => entityCode =>
-  `-- Entity: ${meta.sections[entityCode].name}${enumTypes(meta, entityCode)}
+  `-- Entity: ${meta.sections[entityCode].name}
 create table ${getTableName(entityCode)}
 (
 ${columnDefs(meta, entityCode)}
 );` +
-  `${uniqueIndexes(meta, entityCode)}`
+  `${uniqueIndexes(meta, entityCode)}${enumConstraints(meta, entityCode)}`
 
 const generateCreateTables = (meta, targetDir) => {
   console.log('- Generating Postgres "create-tables.sql"')
