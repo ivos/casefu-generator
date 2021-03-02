@@ -2,8 +2,6 @@ import React from 'react'
 import { Form } from 'react-bootstrap'
 import { CreateButton, FieldGroup, ListScreen } from '../../shared'
 import { MasterASearchSelect } from '../master-a/MasterASelects'
-import { MasterASearchSelect } from '../master-a/MasterASelects'
-import { MasterBSearchSelect } from '../master-b/MasterBSelects'
 import { MasterBSearchSelect } from '../master-b/MasterBSelects'
 import { detailBFromApi, detailBToApi, useDetailBs } from './detail-b-api'
 

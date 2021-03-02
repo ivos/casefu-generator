@@ -99,7 +99,9 @@ import * as Yup from 'yup'
   }
   imports += ' EditScreen, FieldGroup } from \'../../shared\'\n'
   imports += filterToOne(meta, entityCode)
-    .map(([, { dataType }]) => {
+    .map(([, { dataType }]) => dataType)
+    .filter((item, index, array) => array.indexOf(item) === index)
+    .map(dataType => {
       const referredEntityCode = extractEntityCodeFromRef(dataType)
       return `import { ${referredEntityCode}Select } from '../${pkg(referredEntityCode)}/${referredEntityCode}Selects'\n`
     })

@@ -118,7 +118,9 @@ import { Form } from 'react-bootstrap'
   }
   imports += ' FieldGroup, ListScreen } from \'../../shared\'\n'
   imports += filterToOne(meta, entityCode)
-    .map(([, { dataType }]) => {
+    .map(([, { dataType }]) => dataType)
+    .filter((item, index, array) => array.indexOf(item) === index)
+    .map(dataType => {
       const referredEntityCode = extractEntityCodeFromRef(dataType)
       return `import { ${referredEntityCode}SearchSelect } from '../${pkg(referredEntityCode)}/${referredEntityCode}Selects'\n`
     })

@@ -3,8 +3,6 @@ import { Form } from 'react-bootstrap'
 import * as Yup from 'yup'
 import { CreateScreen, FieldGroup } from '../../shared'
 import { MasterASelect } from '../master-a/MasterASelects'
-import { MasterASelect } from '../master-a/MasterASelects'
-import { MasterBSelect } from '../master-b/MasterBSelects'
 import { MasterBSelect } from '../master-b/MasterBSelects'
 import { createDetailB } from './detail-b-api'
 
