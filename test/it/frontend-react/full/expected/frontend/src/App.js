@@ -10,6 +10,7 @@ import MasterBRouter from './app/master-b/MasterBRouter'
 import DetailARouter from './app/detail-a/DetailARouter'
 import DetailBRouter from './app/detail-b/DetailBRouter'
 import LinkABRouter from './app/link-ab/LinkABRouter'
+import HierarchyRouter from './app/hierarchy/HierarchyRouter'
 
 export default () =>
   <Router>
@@ -30,6 +31,9 @@ export default () =>
         </Route>
         <Route path="/link-abs">
           <LinkABRouter/>
+        </Route>
+        <Route path="/hierarchies">
+          <HierarchyRouter/>
         </Route>
         <Route path="/">
           <Home/>

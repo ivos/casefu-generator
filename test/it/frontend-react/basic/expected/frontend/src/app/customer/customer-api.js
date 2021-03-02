@@ -17,6 +17,7 @@ import {
   update
 } from '../../api'
 import { collapse, restore } from '../../shared/utils'
+import { expandCountry } from '../country/country-api'
 
 const pageSize = defaultPageSize
 const sort = data => {
@@ -25,8 +26,11 @@ const sort = data => {
 
 update(data => ({ ...data, customers: data.customers || [] }))
 
-const expandCustomer = values => {
-  values = expand(values, 'countryCode', 'country', 'countries')
+export const expandCustomer = values => {
+  if (values) {
+    values = expand(values, 'countryCode', 'country', 'countries')
+    values.country = expandCountry(values.country)
+  }
   return values
 }
 

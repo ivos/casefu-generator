@@ -23,7 +23,7 @@ const sort = data => {
 
 update(data => ({ ...data, branches: data.branches || [] }))
 
-const expandBranch = values => {
+export const expandBranch = values => {
   return values
 }
 

@@ -18,6 +18,7 @@ import {
   update
 } from '../../api'
 import { collapse, dateTimeToApi, restore, temporalFromApi } from '../../shared/utils'
+import { expandLocation } from '../location/location-api'
 
 const pageSize = defaultPageSize
 const sort = data => {
@@ -26,8 +27,11 @@ const sort = data => {
 
 update(data => ({ ...data, events: data.events || [] }))
 
-const expandEvent = values => {
-  values = expand(values, 'locationId', 'location', 'locations')
+export const expandEvent = values => {
+  if (values) {
+    values = expand(values, 'locationId', 'location', 'locations')
+    values.location = expandLocation(values.location)
+  }
   return values
 }
 

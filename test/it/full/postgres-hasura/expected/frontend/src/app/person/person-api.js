@@ -23,7 +23,7 @@ const sort = data => {
 
 update(data => ({ ...data, people: data.people || [] }))
 
-const expandPerson = values => {
+export const expandPerson = values => {
   return values
 }
 

@@ -15,6 +15,7 @@ export default () =>
           <NavDropdown.Item as={NavLink} to="/detail-as">Detail as</NavDropdown.Item>
           <NavDropdown.Item as={NavLink} to="/detail-bs">Detail bs</NavDropdown.Item>
           <NavDropdown.Item as={NavLink} to="/link-abs">Link abs</NavDropdown.Item>
+          <NavDropdown.Item as={NavLink} to="/hierarchies">Hierarchies</NavDropdown.Item>
         </NavDropdown>
       </Nav>
     </Navbar.Collapse>

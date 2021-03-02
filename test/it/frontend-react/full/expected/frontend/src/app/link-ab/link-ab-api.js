@@ -15,6 +15,8 @@ import {
   update
 } from '../../api'
 import { collapse, restore } from '../../shared/utils'
+import { expandMasterA } from '../master-a/master-a-api'
+import { expandMasterB } from '../master-b/master-b-api'
 
 const pageSize = defaultPageSize
 const sort = data => {
@@ -23,9 +25,13 @@ const sort = data => {
 
 update(data => ({ ...data, linkAbs: data.linkAbs || [] }))
 
-const expandLinkAB = values => {
-  values = expand(values, 'masterFirstId', 'masterFirst', 'masterAs')
-  values = expand(values, 'masterSecondId', 'masterSecond', 'masterBs')
+export const expandLinkAB = values => {
+  if (values) {
+    values = expand(values, 'masterFirstId', 'masterFirst', 'masterAs')
+    values.masterFirst = expandMasterA(values.masterFirst)
+    values = expand(values, 'masterSecondId', 'masterSecond', 'masterBs')
+    values.masterSecond = expandMasterB(values.masterSecond)
+  }
   return values
 }
 

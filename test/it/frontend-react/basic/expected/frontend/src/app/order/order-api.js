@@ -19,6 +19,7 @@ import {
   update
 } from '../../api'
 import { collapse, dateTimeToApi, dateToApi, restore, temporalFromApi } from '../../shared/utils'
+import { expandCustomer } from '../customer/customer-api'
 
 const pageSize = defaultPageSize
 const sort = data => {
@@ -27,8 +28,11 @@ const sort = data => {
 
 update(data => ({ ...data, orders: data.orders || [] }))
 
-const expandOrder = values => {
-  values = expand(values, 'customerId', 'customer', 'customers')
+export const expandOrder = values => {
+  if (values) {
+    values = expand(values, 'customerId', 'customer', 'customers')
+    values.customer = expandCustomer(values.customer)
+  }
   return values
 }
 

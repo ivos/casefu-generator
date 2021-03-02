@@ -22,7 +22,7 @@ const sort = data => {
 
 update(data => ({ ...data, masterBs: data.masterBs || [] }))
 
-const expandMasterB = values => {
+export const expandMasterB = values => {
   return values
 }
 

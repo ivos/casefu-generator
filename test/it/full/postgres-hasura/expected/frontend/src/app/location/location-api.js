@@ -22,7 +22,7 @@ const sort = data => {
 
 update(data => ({ ...data, locations: data.locations || [] }))
 
-const expandLocation = values => {
+export const expandLocation = values => {
   return values
 }
 

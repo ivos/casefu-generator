@@ -21,7 +21,7 @@ const sort = data => {
 
 update(data => ({ ...data, countries: data.countries || [] }))
 
-const expandCountry = values => {
+export const expandCountry = values => {
   return values
 }
 

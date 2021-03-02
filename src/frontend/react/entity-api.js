@@ -28,7 +28,7 @@ const { pkg, url, codeLower, codeUpper, codePlural, codePluralLower } = require(
 const getSortExpression = (meta, entityCode) => {
   const [attributeCode, { dataType }] = referredLabelAttribute(meta, entityCode)
   const referredEntityCode = extractEntityCodeFromRef(dataType)
-  if (referredEntityCode !== dataType) {
+  if (referredEntityCode !== dataType && referredEntityCode !== entityCode) {
     return attributeCode + '?.' + getSortExpression(meta, referredEntityCode)
   }
   return attributeCode
@@ -103,21 +103,35 @@ import {`
     }
     imports += ' } from \'../../shared/utils\''
   }
+  imports += filterToOne(meta, entityCode)
+    .map(([, { dataType }]) => extractEntityCodeFromRef(dataType))
+    .filter((item, index, array) => array.indexOf(item) === index)
+    .filter(referredEntityCode => referredEntityCode !== entityCode)
+    .map(referredEntityCode => `
+import { expand${referredEntityCode} } from '../${pkg(referredEntityCode)}/${pkg(referredEntityCode)}-api'`)
+    .join('')
 
-  const expandAttribute = ({ from, to, key }) => `
-  values = expand(values, '${from}', '${to}', '${key}')`
-  let expand = `const expand${entityCode} = values => {`
-  expand += filterToOne(meta, entityCode)
+  const expandAttribute = ({ from, to, key, entityCode }) => `
+    values = expand(values, '${from}', '${to}', '${key}')
+    values.${to} = expand${entityCode}(values.${to})`
+  let expand = `export const expand${entityCode} = values => {`
+  const expandAttributes = filterToOne(meta, entityCode)
     .map(([attributeCode, { dataType }]) => {
       const referredEntityCode = extractEntityCodeFromRef(dataType)
       return {
         from: attributeCode + codeUpper(primaryKey(meta, referredEntityCode)[0]),
         to: attributeCode,
-        key: codePluralLower(referredEntityCode)
+        key: codePluralLower(referredEntityCode),
+        entityCode: referredEntityCode
       }
     })
     .map(expandAttribute)
     .join('')
+  if (expandAttributes) {
+    expand += `
+  if (values) {${expandAttributes}
+  }`
+  }
   expand += `
   return values
 }`
