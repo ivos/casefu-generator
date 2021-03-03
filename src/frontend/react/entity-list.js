@@ -1,5 +1,6 @@
 const fs = require('fs')
 const path = require('path')
+const { distinct } = require('../../utils')
 const {
   isToOne,
   isEnum,
@@ -119,7 +120,7 @@ import { Form } from 'react-bootstrap'
   imports += ' FieldGroup, ListScreen } from \'../../shared\'\n'
   imports += filterToOne(meta, entityCode)
     .map(([, { dataType }]) => dataType)
-    .filter((item, index, array) => array.indexOf(item) === index)
+    .filter(distinct)
     .map(dataType => {
       const referredEntityCode = extractEntityCodeFromRef(dataType)
       return `import { ${referredEntityCode}SearchSelect } from '../${pkg(referredEntityCode)}/${referredEntityCode}Selects'\n`

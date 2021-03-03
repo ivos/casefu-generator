@@ -1,5 +1,6 @@
 const fs = require('fs')
 const path = require('path')
+const { distinct } = require('../../utils')
 const {
   isToOne,
   isEnum,
@@ -105,7 +106,7 @@ import {`
   }
   imports += filterToOne(meta, entityCode)
     .map(([, { dataType }]) => extractEntityCodeFromRef(dataType))
-    .filter((item, index, array) => array.indexOf(item) === index)
+    .filter(distinct)
     .filter(referredEntityCode => referredEntityCode !== entityCode)
     .map(referredEntityCode => `
 import { expand${referredEntityCode} } from '../${pkg(referredEntityCode)}/${pkg(referredEntityCode)}-api'`)
