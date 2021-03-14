@@ -1,12 +1,14 @@
 import React from 'react'
 import { AsyncSelect } from '../../shared'
 import { listLinkAbs, useLinkAB } from './link-ab-api'
-import { useRestored } from '../../shared/utils'
+import { entityLabel, useRestored } from '../../shared/utils'
+
+export const linkAbLabel = data => data && entityLabel(', ', data.masterFirst)
 
 export const LinkABSelect = props =>
   <AsyncSelect searchFn={query => listLinkAbs({ masterFirst: query })}
                getOptionValue={option => option.id}
-               getOptionLabel={option => option.masterFirst}
+               getOptionLabel={linkAbLabel}
                {...props}/>
 
 export const LinkABSearchSelect = ({ name, ...rest }) =>

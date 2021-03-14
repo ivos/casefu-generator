@@ -1,12 +1,14 @@
 import React from 'react'
 import { AsyncSelect } from '../../shared'
 import { listDetailAs, useDetailA } from './detail-a-api'
-import { useRestored } from '../../shared/utils'
+import { entityLabel, useRestored } from '../../shared/utils'
+
+export const detailALabel = data => data && entityLabel(', ', data.code)
 
 export const DetailASelect = props =>
   <AsyncSelect searchFn={query => listDetailAs({ code: query })}
                getOptionValue={option => option.id}
-               getOptionLabel={option => option.code}
+               getOptionLabel={detailALabel}
                {...props}/>
 
 export const DetailASearchSelect = ({ name, ...rest }) =>

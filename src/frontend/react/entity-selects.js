@@ -4,7 +4,7 @@ const {
   referredLabelAttribute,
   primaryKey
 } = require('../../meta/entity')
-const { pkg, codeUpper, codePlural } = require('./shared')
+const { pkg, codeLower, codeUpper, codePlural } = require('./shared')
 
 const generateSelects = (meta, targetDir, entityCode) => {
   const [labelAttributeCode] = referredLabelAttribute(meta, entityCode)
@@ -12,12 +12,14 @@ const generateSelects = (meta, targetDir, entityCode) => {
   const content = `import React from 'react'
 import { AsyncSelect } from '../../shared'
 import { list${codePlural(entityCode)}, use${entityCode} } from './${pkg(entityCode)}-api'
-import { useRestored } from '../../shared/utils'
+import { entityLabel, useRestored } from '../../shared/utils'
+
+export const ${codeLower(entityCode)}Label = data => data && entityLabel(', ', data.${labelAttributeCode})
 
 export const ${entityCode}Select = props =>
   <AsyncSelect searchFn={query => list${codePlural(entityCode)}({ ${labelAttributeCode}: query })}
                getOptionValue={option => option.id}
-               getOptionLabel={option => option.${labelAttributeCode}}
+               getOptionLabel={${codeLower(entityCode)}Label}
                {...props}/>
 
 export const ${entityCode}SearchSelect = ({ name, ...rest }) =>

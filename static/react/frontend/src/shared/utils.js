@@ -117,3 +117,8 @@ export const useFormField = name => {
 
   return { isValid, isInvalid, changedValue, serverError }
 }
+
+export const entityLabel = (separator, ...values) =>
+  values
+    .filter(value => !!value)
+    .join(separator)

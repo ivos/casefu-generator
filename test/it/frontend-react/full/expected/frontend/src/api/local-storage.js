@@ -17,8 +17,11 @@ export const exactMatch = (params, entity, name) =>
 export const numberMatch = (params, entity, name) =>
   params[name] === null || params[name] === undefined || (entity[name] === Number(params[name]))
 
+export const caseInsensitiveSearch = (paramsValue, entityValue) =>
+  !paramsValue || (entityValue && entityValue.toLowerCase().indexOf(paramsValue.toLowerCase()) === 0)
+
 export const caseInsensitiveMatch = (params, entity, name) =>
-  !params[name] || (entity[name] && entity[name].toLowerCase().indexOf(params[name].toLowerCase()) === 0)
+  caseInsensitiveSearch(params[name], entity[name])
 
 export const atLeast = (params, paramName, entity, attributeName) =>
   !params[paramName] || (entity[attributeName] >= params[paramName])

@@ -1,12 +1,14 @@
 import React from 'react'
 import { AsyncSelect } from '../../shared'
 import { listMasterBs, useMasterB } from './master-b-api'
-import { useRestored } from '../../shared/utils'
+import { entityLabel, useRestored } from '../../shared/utils'
+
+export const masterBLabel = data => data && entityLabel(', ', data.name)
 
 export const MasterBSelect = props =>
   <AsyncSelect searchFn={query => listMasterBs({ name: query })}
                getOptionValue={option => option.id}
-               getOptionLabel={option => option.name}
+               getOptionLabel={masterBLabel}
                {...props}/>
 
 export const MasterBSearchSelect = ({ name, ...rest }) =>
