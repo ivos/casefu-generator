@@ -30,30 +30,30 @@ const generateList = (meta, targetDir, entityCode) => {
       }))
       .map(columnHeader)
 
-  const tableValue = ({ content }) => `
-        <td>{${content}}</td>`
+  const tableValue = ({ value }) => `
+        <td>{${value}}</td>`
   const tableValues =
     userAttributeEntries(meta, entityCode)
       .map(attributeEntry => {
         const [attributeCode, { dataType }] = attributeEntry
-        let content = `item.${attributeCode}`
+        let value = `item.${attributeCode}`
+        if (isEnum(attributeEntry)) {
+          value = `sentenceCase(${value} || '')`
+        }
+        if (isDate(attributeEntry)) {
+          value = `formatDate(${value})`
+        }
+        if (isDateTime(attributeEntry)) {
+          value = `formatDateTime(${value})`
+        }
         if (isToOne(attributeEntry)) {
           const referredEntityCode = extractEntityCodeFromRef(dataType)
           const [labelAttributeCode] = referredLabelAttribute(meta, referredEntityCode)
           if (labelAttributeCode) {
-            content += `?.${labelAttributeCode}`
+            value += `?.${labelAttributeCode}`
           }
         }
-        if (isEnum(attributeEntry)) {
-          content = `sentenceCase(${content} || '')`
-        }
-        if (isDate(attributeEntry)) {
-          content = `formatDate(${content})`
-        }
-        if (isDateTime(attributeEntry)) {
-          content = `formatDateTime(${content})`
-        }
-        return { content }
+        return { value }
       })
       .map(tableValue)
       .join('')

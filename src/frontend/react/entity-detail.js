@@ -54,8 +54,8 @@ const generateDetail = (meta, targetDir, entityCode) => {
           const pkAttributeCode = pkAttEntry ? pkAttEntry[0] : 'id'
           if (labelAttributeCode) {
             children = `
-          <Link to={\`/${url(referredEntityCode)}/\${data.${attributeCode}?.${pkAttributeCode}}\`}>
-            {data.${attributeCode}?.${labelAttributeCode}}
+          <Link to={\`/${url(referredEntityCode)}/\${${value}?.${pkAttributeCode}}\`}>
+            {${value}?.${labelAttributeCode}}
           </Link>`
           }
         }
