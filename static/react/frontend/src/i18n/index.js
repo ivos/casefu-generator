@@ -1,4 +1,4 @@
-import { format } from 'date-fns'
+import { format, parseISO } from 'date-fns'
 import { cs, de } from 'date-fns/locale'
 import { setLocale as yupSetLocale } from 'yup'
 import { registerLocale } from 'react-datepicker'
@@ -18,9 +18,14 @@ yupSetLocale({
   }
 })
 
-export const formatTemporal = (value, formatStr) =>
-  format(value, formatStr, { locale: defaultDateFnsLocale })
-export const formatDate = value =>
-  value ? format(value, 'PP', { locale: defaultDateFnsLocale }) : null
-export const formatDateTime = value =>
-  value ? format(value, 'PPp', { locale: defaultDateFnsLocale }) : null
+export const formatTemporal = (value, formatStr) => {
+  if (value) {
+    if (typeof value === 'string') {
+      value = parseISO(value)
+    }
+    return format(value, formatStr, { locale: defaultDateFnsLocale })
+  }
+  return null
+}
+export const formatDate = value => formatTemporal(value, 'PP')
+export const formatDateTime = value => formatTemporal(value, 'PPp')

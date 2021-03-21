@@ -3,7 +3,8 @@ import { AsyncSelect } from '../../shared'
 import { listLocations, useLocation } from './location-api'
 import { entityLabel, useRestored } from '../../shared/utils'
 
-export const locationLabel = data => data && entityLabel(', ', data.name)
+export const locationLabel = data => data && entityLabel(', ',
+  data.name)
 
 export const LocationSelect = props =>
   <AsyncSelect searchFn={query => listLocations({ name: query })}

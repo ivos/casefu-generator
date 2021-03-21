@@ -3,7 +3,9 @@ import { AsyncSelect } from '../../shared'
 import { listMasterAs, useMasterA } from './master-a-api'
 import { entityLabel, useRestored } from '../../shared/utils'
 
-export const masterALabel = data => data && entityLabel(', ', data.code)
+export const masterALabel = data => data && entityLabel(', ',
+  data.code,
+  data.name)
 
 export const MasterASelect = props =>
   <AsyncSelect searchFn={query => listMasterAs({ code: query })}
