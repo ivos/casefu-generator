@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { DetailScreen, EditButton, StaticGroup } from '../../shared'
+import { locationLabel } from '../location/LocationSelects'
 import { sentenceCase } from 'change-case'
 import { useEvent } from './event-api'
 import { formatDateTime } from '../../i18n'
@@ -24,7 +25,7 @@ export default () =>
         <StaticGroup label="Status" sm={[2, 10]} value={sentenceCase(data.status || '')}/>
         <StaticGroup label="Location" sm={[2, 10]}>
           <Link to={`/locations/${data.location?.id}`}>
-            {data.location?.name}
+            {locationLabel(data.location)}
           </Link>
         </StaticGroup>
       </>

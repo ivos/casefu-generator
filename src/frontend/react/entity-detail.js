@@ -1,5 +1,6 @@
 const fs = require('fs')
 const path = require('path')
+const { distinct } = require('../../utils')
 const {
   attributeEntries,
   isToOne,
@@ -12,6 +13,7 @@ const {
   userAttributeEntries,
   referredLabelAttribute,
   enumValues,
+  filterToOne,
   hasToOne,
   hasEnum,
   hasStatusEnum,
@@ -55,7 +57,7 @@ const generateDetail = (meta, targetDir, entityCode) => {
           if (labelAttributeCode) {
             children = `
           <Link to={\`/${url(referredEntityCode)}/\${${value}?.${pkAttributeCode}}\`}>
-            {${value}?.${labelAttributeCode}}
+            {${codeLower(referredEntityCode)}Label(${value})}
           </Link>`
           }
         }
@@ -76,6 +78,14 @@ const generateDetail = (meta, targetDir, entityCode) => {
     imports += ' SavingButton,'
   }
   imports += ' StaticGroup } from \'../../shared\'\n'
+  imports += filterToOne(meta, entityCode)
+    .map(attributeEntry => {
+      const [, { dataType }] = attributeEntry
+      const referredEntityCode = extractEntityCodeFromRef(dataType)
+      return `import { ${codeLower(referredEntityCode)}Label } from '../${pkg(referredEntityCode)}/${referredEntityCode}Selects'\n`
+    })
+    .filter(distinct)
+    .join('')
   if (hasEnum(meta, entityCode)) {
     imports += 'import { sentenceCase } from \'change-case\'\n'
   }

@@ -1,6 +1,8 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { DetailScreen, EditButton, StaticGroup } from '../../shared'
+import { masterALabel } from '../master-a/MasterASelects'
+import { masterBLabel } from '../master-b/MasterBSelects'
 import { useDetailB } from './detail-b-api'
 
 export default () =>
@@ -21,22 +23,22 @@ export default () =>
         <StaticGroup label="Name" sm={[2, 10]} value={data.name}/>
         <StaticGroup label="Master a1" sm={[2, 10]}>
           <Link to={`/master-as/${data.masterA1?.id}`}>
-            {data.masterA1?.code}
+            {masterALabel(data.masterA1)}
           </Link>
         </StaticGroup>
         <StaticGroup label="Master a2" sm={[2, 10]}>
           <Link to={`/master-as/${data.masterA2?.id}`}>
-            {data.masterA2?.code}
+            {masterALabel(data.masterA2)}
           </Link>
         </StaticGroup>
         <StaticGroup label="Master b1" sm={[2, 10]}>
           <Link to={`/master-bs/${data.masterB1?.id}`}>
-            {data.masterB1?.name}
+            {masterBLabel(data.masterB1)}
           </Link>
         </StaticGroup>
         <StaticGroup label="Master b2" sm={[2, 10]}>
           <Link to={`/master-bs/${data.masterB2?.id}`}>
-            {data.masterB2?.name}
+            {masterBLabel(data.masterB2)}
           </Link>
         </StaticGroup>
       </>

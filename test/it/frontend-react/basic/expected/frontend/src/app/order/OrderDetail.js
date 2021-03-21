@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { DetailScreen, EditButton, SavingButton, StaticGroup } from '../../shared'
+import { customerLabel } from '../customer/CustomerSelects'
 import { sentenceCase } from 'change-case'
 import { patchOrder, useOrder } from './order-api'
 import { formatDate, formatDateTime } from '../../i18n'
@@ -43,7 +44,7 @@ export default () =>
         <StaticGroup label="Order number" sm={[2, 10]} value={data.orderNumber}/>
         <StaticGroup label="Customer" sm={[2, 10]}>
           <Link to={`/customers/${data.customer?.id}`}>
-            {data.customer?.name}
+            {customerLabel(data.customer)}
           </Link>
         </StaticGroup>
         <StaticGroup label="Status" sm={[2, 10]} value={sentenceCase(data.status || '')}/>
