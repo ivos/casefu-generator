@@ -2,7 +2,7 @@ import React from 'react'
 import { Form } from 'react-bootstrap'
 import { sentenceCase } from 'change-case'
 import { CreateButton, DateTimeRangePicker, FieldGroup, ListScreen } from '../../shared'
-import { LocationSearchSelect } from '../location/LocationSelects'
+import { locationLabel, LocationSearchSelect } from '../location/LocationSelects'
 import EventStatusSelect from './EventStatusSelect'
 import { eventFromApi, eventToApi, useEvents } from './event-api'
 import { formatDateTime } from '../../i18n'
@@ -52,7 +52,7 @@ export default () =>
         <td>{item.id}</td>
         <td>{formatDateTime(item.time)}</td>
         <td>{sentenceCase(item.status || '')}</td>
-        <td>{item.location?.name}</td>
+        <td>{locationLabel(item.location)}</td>
       </>
     }
   />

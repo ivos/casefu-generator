@@ -1,8 +1,8 @@
 import React from 'react'
 import { Form } from 'react-bootstrap'
 import { CreateButton, FieldGroup, ListScreen } from '../../shared'
-import { MasterASearchSelect } from '../master-a/MasterASelects'
-import { MasterBSearchSelect } from '../master-b/MasterBSelects'
+import { masterALabel, MasterASearchSelect } from '../master-a/MasterASelects'
+import { masterBLabel, MasterBSearchSelect } from '../master-b/MasterBSelects'
 import { linkAbFromApi, linkAbToApi, useLinkAbs } from './link-ab-api'
 
 let searchValuesCache = {
@@ -44,8 +44,8 @@ export default () =>
     tablePageContent={
       item => <>
         <td>{item.id}</td>
-        <td>{item.masterFirst?.code}</td>
-        <td>{item.masterSecond?.name}</td>
+        <td>{masterALabel(item.masterFirst)}</td>
+        <td>{masterBLabel(item.masterSecond)}</td>
       </>
     }
   />

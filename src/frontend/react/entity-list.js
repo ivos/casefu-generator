@@ -8,7 +8,6 @@ const {
   isDateTime,
   extractEntityCodeFromRef,
   userAttributeEntries,
-  referredLabelAttribute,
   filterToOne,
   filterEnum,
   hasEnum,
@@ -48,10 +47,7 @@ const generateList = (meta, targetDir, entityCode) => {
         }
         if (isToOne(attributeEntry)) {
           const referredEntityCode = extractEntityCodeFromRef(dataType)
-          const [labelAttributeCode] = referredLabelAttribute(meta, referredEntityCode)
-          if (labelAttributeCode) {
-            value += `?.${labelAttributeCode}`
-          }
+          value = `${codeLower(referredEntityCode)}Label(${value})`
         }
         return { value }
       })
@@ -123,7 +119,8 @@ import { Form } from 'react-bootstrap'
     .filter(distinct)
     .map(dataType => {
       const referredEntityCode = extractEntityCodeFromRef(dataType)
-      return `import { ${referredEntityCode}SearchSelect } from '../${pkg(referredEntityCode)}/${referredEntityCode}Selects'\n`
+      return `import { ${codeLower(referredEntityCode)}Label, ${referredEntityCode}SearchSelect }` +
+        ` from '../${pkg(referredEntityCode)}/${referredEntityCode}Selects'\n`
     })
     .join('')
   imports += filterEnum(meta, entityCode)

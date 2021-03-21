@@ -2,7 +2,7 @@ import React from 'react'
 import { Form } from 'react-bootstrap'
 import { sentenceCase } from 'change-case'
 import { CreateButton, DateRangePicker, DateTimeRangePicker, FieldGroup, ListScreen } from '../../shared'
-import { CustomerSearchSelect } from '../customer/CustomerSelects'
+import { customerLabel, CustomerSearchSelect } from '../customer/CustomerSelects'
 import OrderStatusSelect from './OrderStatusSelect'
 import { orderFromApi, orderToApi, useOrders } from './order-api'
 import { formatDate, formatDateTime } from '../../i18n'
@@ -61,7 +61,7 @@ export default () =>
       item => <>
         <td>{item.id}</td>
         <td>{item.orderNumber}</td>
-        <td>{item.customer?.name}</td>
+        <td>{customerLabel(item.customer)}</td>
         <td>{sentenceCase(item.status || '')}</td>
         <td>{formatDateTime(item.received)}</td>
         <td>{formatDate(item.deliveryDate)}</td>

@@ -1,8 +1,8 @@
 import React from 'react'
 import { Form } from 'react-bootstrap'
 import { CreateButton, FieldGroup, ListScreen } from '../../shared'
-import { MasterASearchSelect } from '../master-a/MasterASelects'
-import { MasterBSearchSelect } from '../master-b/MasterBSelects'
+import { masterALabel, MasterASearchSelect } from '../master-a/MasterASelects'
+import { masterBLabel, MasterBSearchSelect } from '../master-b/MasterBSelects'
 import { detailBFromApi, detailBToApi, useDetailBs } from './detail-b-api'
 
 let searchValuesCache = {
@@ -54,10 +54,10 @@ export default () =>
       item => <>
         <td>{item.id}</td>
         <td>{item.name}</td>
-        <td>{item.masterA1?.code}</td>
-        <td>{item.masterA2?.code}</td>
-        <td>{item.masterB1?.name}</td>
-        <td>{item.masterB2?.name}</td>
+        <td>{masterALabel(item.masterA1)}</td>
+        <td>{masterALabel(item.masterA2)}</td>
+        <td>{masterBLabel(item.masterB1)}</td>
+        <td>{masterBLabel(item.masterB2)}</td>
       </>
     }
   />

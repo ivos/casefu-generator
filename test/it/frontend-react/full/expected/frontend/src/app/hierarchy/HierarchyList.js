@@ -1,7 +1,7 @@
 import React from 'react'
 import { Form } from 'react-bootstrap'
 import { CreateButton, FieldGroup, ListScreen } from '../../shared'
-import { HierarchySearchSelect } from '../hierarchy/HierarchySelects'
+import { hierarchyLabel, HierarchySearchSelect } from '../hierarchy/HierarchySelects'
 import { hierarchyFromApi, hierarchyToApi, useHierarchies } from './hierarchy-api'
 
 let searchValuesCache = {
@@ -43,7 +43,7 @@ export default () =>
     tablePageContent={
       item => <>
         <td>{item.id}</td>
-        <td>{item.parent?.parent}</td>
+        <td>{hierarchyLabel(item.parent)}</td>
         <td>{item.name}</td>
       </>
     }

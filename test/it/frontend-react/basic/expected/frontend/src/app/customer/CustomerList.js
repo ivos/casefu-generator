@@ -2,7 +2,7 @@ import React from 'react'
 import { Form } from 'react-bootstrap'
 import { sentenceCase } from 'change-case'
 import { CreateButton, FieldGroup, ListScreen } from '../../shared'
-import { CountrySearchSelect } from '../country/CountrySelects'
+import { countryLabel, CountrySearchSelect } from '../country/CountrySelects'
 import CustomerStatusSelect from './CustomerStatusSelect'
 import { customerFromApi, customerToApi, useCustomers } from './customer-api'
 
@@ -49,7 +49,7 @@ export default () =>
       item => <>
         <td>{item.id}</td>
         <td>{item.name}</td>
-        <td>{item.country?.name}</td>
+        <td>{countryLabel(item.country)}</td>
         <td>{sentenceCase(item.status || '')}</td>
       </>
     }

@@ -11,7 +11,6 @@ const {
   extractEntityCodeFromRef,
   explicitPKAttEntry,
   userAttributeEntries,
-  referredLabelAttribute,
   enumValues,
   filterToOne,
   hasToOne,
@@ -51,15 +50,12 @@ const generateDetail = (meta, targetDir, entityCode) => {
         }
         if (isToOne(attributeEntry)) {
           const referredEntityCode = extractEntityCodeFromRef(dataType)
-          const [labelAttributeCode] = referredLabelAttribute(meta, referredEntityCode)
           const pkAttEntry = explicitPKAttEntry(meta, entityCode)
           const pkAttributeCode = pkAttEntry ? pkAttEntry[0] : 'id'
-          if (labelAttributeCode) {
-            children = `
+          children = `
           <Link to={\`/${url(referredEntityCode)}/\${${value}?.${pkAttributeCode}}\`}>
             {${codeLower(referredEntityCode)}Label(${value})}
           </Link>`
-          }
         }
         return { label: label(attributeCode), value, children }
       })
