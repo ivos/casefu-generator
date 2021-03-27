@@ -13,6 +13,7 @@ create table people
     sex text,
     version bigint not null
 );
+create unique index ui_people__personal_number on people (personal_number);
 create unique index ui_people__user_name on people (user_name);
 create unique index ui_people__email on people (email);
 alter table people

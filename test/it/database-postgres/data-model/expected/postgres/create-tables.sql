@@ -13,6 +13,7 @@ create table people
     email text,
     sex text
 );
+create unique index ui_people__personal_number on people (personal_number);
 create unique index ui_people__user_name on people (user_name);
 create unique index ui_people__email on people (email);
 alter table people
@@ -44,6 +45,7 @@ create table plain_pks
     maybe_person_custom_id integer,
     version bigint not null
 );
+create unique index ui_plain_pks__business_key on plain_pks (business_key);
 
 -- Entity: Location
 create table locations

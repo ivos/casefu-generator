@@ -18,7 +18,7 @@ const isVersion = ([_, { status }]) => ['V'].includes(status)
 const isToOne = ([_, { status }]) =>
   ['FPK', 'FK', 'OFK'].includes(status) ||
   ['1', '0..1'].includes(normalizeRelationStatus(status).split(' : ')[1])
-const isUnique = ([_, { status }]) => ['U', 'OU'].includes(status)
+const isUnique = ([_, { status }]) => ['NK', 'BK', 'U', 'OU'].includes(status)
 const isNotNull = ([_, { status }]) =>
   ['FK', 'NK', 'BK', 'U', 'M', 'V', 'S'].includes(status) ||
   ['1', '1..n'].includes(normalizeRelationStatus(status).split(' : ')[1])
