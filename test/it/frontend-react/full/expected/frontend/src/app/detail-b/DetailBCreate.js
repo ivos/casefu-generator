@@ -4,7 +4,7 @@ import * as Yup from 'yup'
 import { CreateScreen, FieldGroup } from '../../shared'
 import { MasterASelect } from '../master-a/MasterASelects'
 import { MasterBSelect } from '../master-b/MasterBSelects'
-import { createDetailB } from './detail-b-api'
+import { createDetailB, detailBFromApi } from './detail-b-api'
 
 export default () =>
   <CreateScreen
@@ -12,6 +12,7 @@ export default () =>
     entityTitle="Detail b"
     url="/detail-bs"
     rows={5}
+    fromApi={detailBFromApi}
     initialValues={{
       name: '',
       masterA1: '',

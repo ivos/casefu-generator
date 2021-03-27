@@ -7,14 +7,10 @@ export const masterALabel = data => data && entityLabel(', ',
   data.code,
   data.name)
 
-export const MasterASelect = props =>
+export const MasterASelect = ({ name, ...rest }) =>
   <AsyncSelect searchFn={query => listMasterAs({ code: query })}
                getOptionValue={option => option.id}
                getOptionLabel={masterALabel}
-               {...props}/>
-
-export const MasterASearchSelect = ({ name, ...rest }) =>
-  <MasterASelect
-    restoredValue={useRestored(name + 'Id', useMasterA)}
-    name={name}
-    {...rest}/>
+               restoredValue={useRestored(name + 'Id', useMasterA)}
+               name={name}
+               {...rest}/>

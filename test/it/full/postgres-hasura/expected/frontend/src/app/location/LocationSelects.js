@@ -6,14 +6,10 @@ import { entityLabel, useRestored } from '../../shared/utils'
 export const locationLabel = data => data && entityLabel(', ',
   data.name)
 
-export const LocationSelect = props =>
+export const LocationSelect = ({ name, ...rest }) =>
   <AsyncSelect searchFn={query => listLocations({ name: query })}
                getOptionValue={option => option.id}
                getOptionLabel={locationLabel}
-               {...props}/>
-
-export const LocationSearchSelect = ({ name, ...rest }) =>
-  <LocationSelect
-    restoredValue={useRestored(name + 'Id', useLocation)}
-    name={name}
-    {...rest}/>
+               restoredValue={useRestored(name + 'Id', useLocation)}
+               name={name}
+               {...rest}/>

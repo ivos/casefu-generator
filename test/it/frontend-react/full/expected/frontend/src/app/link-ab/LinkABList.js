@@ -1,8 +1,8 @@
 import React from 'react'
 import { Form } from 'react-bootstrap'
 import { CreateButton, FieldGroup, ListScreen } from '../../shared'
-import { masterALabel, MasterASearchSelect } from '../master-a/MasterASelects'
-import { masterBLabel, MasterBSearchSelect } from '../master-b/MasterBSelects'
+import { masterALabel, MasterASelect } from '../master-a/MasterASelects'
+import { masterBLabel, MasterBSelect } from '../master-b/MasterBSelects'
 import { linkAbFromApi, linkAbToApi, useLinkAbs } from './link-ab-api'
 
 let searchValuesCache = {
@@ -18,7 +18,8 @@ export default () =>
     title={
       <>
         Link abs
-        <CreateButton to="/link-abs/new" title="Create new link ab..."/>
+        <CreateButton to="/link-abs/new" title="Create new link ab..."
+                      initialValues={linkAbToApi(searchValuesCache)}/>
       </>
     }
     url="/link-abs"
@@ -29,8 +30,8 @@ export default () =>
     searchFormContent={
       <>
         <FieldGroup as={Form.Control} name="id" label="Id" sm={[2, 9]} isValid={false}/>
-        <FieldGroup as={MasterASearchSelect} name="masterFirst" label="Master first" sm={[2, 9]} isValid={false}/>
-        <FieldGroup as={MasterBSearchSelect} name="masterSecond" label="Master second" sm={[2, 9]} isValid={false}/>
+        <FieldGroup as={MasterASelect} name="masterFirst" label="Master first" sm={[2, 9]} isValid={false}/>
+        <FieldGroup as={MasterBSelect} name="masterSecond" label="Master second" sm={[2, 9]} isValid={false}/>
       </>
     }
     columns={3}

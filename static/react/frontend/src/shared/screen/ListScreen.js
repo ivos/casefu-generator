@@ -17,8 +17,13 @@ export default (
   const history = useHistory()
   const urlParams = useUrlParams()
 
+  const setSearchValuesFull = values => {
+    setSearchValuesCache && setSearchValuesCache(values)
+    setSearchValues(values)
+  }
+
   useMount(() => {
-    setSearchValues({ ...searchValues, ...fromApi(urlParams) })
+    setSearchValuesFull({ ...searchValues, ...fromApi(urlParams) })
   })
 
   useEffect(() => {
@@ -39,8 +44,7 @@ export default (
       <Card className="mb-3">
         <Card.Body>
           <SearchForm searchValues={searchValues}
-                      setSearchValues={setSearchValues}
-                      setSearchValuesCache={setSearchValuesCache}
+                      setSearchValues={setSearchValuesFull}
                       resetPages={resetPages}>
             {searchFormContent}
           </SearchForm>

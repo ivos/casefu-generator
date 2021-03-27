@@ -2,7 +2,7 @@ import React from 'react'
 import { Form } from 'react-bootstrap'
 import * as Yup from 'yup'
 import { CreateScreen, FieldGroup } from '../../shared'
-import { createCountry } from './country-api'
+import { createCountry, countryFromApi } from './country-api'
 
 export default () =>
   <CreateScreen
@@ -10,6 +10,7 @@ export default () =>
     entityTitle="Country"
     url="/countries"
     rows={2}
+    fromApi={countryFromApi}
     initialValues={{
       code: '',
       name: ''

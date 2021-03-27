@@ -1,7 +1,7 @@
 import React from 'react'
 import { Form } from 'react-bootstrap'
 import { CreateButton, FieldGroup, ListScreen } from '../../shared'
-import { hierarchyLabel, HierarchySearchSelect } from '../hierarchy/HierarchySelects'
+import { hierarchyLabel, HierarchySelect } from '../hierarchy/HierarchySelects'
 import { hierarchyFromApi, hierarchyToApi, useHierarchies } from './hierarchy-api'
 
 let searchValuesCache = {
@@ -17,7 +17,8 @@ export default () =>
     title={
       <>
         Hierarchies
-        <CreateButton to="/hierarchies/new" title="Create new hierarchy..."/>
+        <CreateButton to="/hierarchies/new" title="Create new hierarchy..."
+                      initialValues={hierarchyToApi(searchValuesCache)}/>
       </>
     }
     url="/hierarchies"
@@ -28,7 +29,7 @@ export default () =>
     searchFormContent={
       <>
         <FieldGroup as={Form.Control} name="id" label="Id" sm={[2, 9]} isValid={false}/>
-        <FieldGroup as={HierarchySearchSelect} name="parent" label="Parent" sm={[2, 9]} isValid={false}/>
+        <FieldGroup as={HierarchySelect} name="parent" label="Parent" sm={[2, 9]} isValid={false}/>
         <FieldGroup as={Form.Control} name="name" label="Name" sm={[2, 9]} isValid={false}/>
       </>
     }

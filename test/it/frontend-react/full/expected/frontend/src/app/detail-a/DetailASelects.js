@@ -9,14 +9,10 @@ export const detailALabel = data => data && entityLabel(', ',
   data.name,
   masterALabel(data.master))
 
-export const DetailASelect = props =>
+export const DetailASelect = ({ name, ...rest }) =>
   <AsyncSelect searchFn={query => listDetailAs({ code: query })}
                getOptionValue={option => option.id}
                getOptionLabel={detailALabel}
-               {...props}/>
-
-export const DetailASearchSelect = ({ name, ...rest }) =>
-  <DetailASelect
-    restoredValue={useRestored(name + 'Id', useDetailA)}
-    name={name}
-    {...rest}/>
+               restoredValue={useRestored(name + 'Id', useDetailA)}
+               name={name}
+               {...rest}/>

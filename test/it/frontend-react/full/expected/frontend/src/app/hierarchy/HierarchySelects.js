@@ -7,14 +7,10 @@ export const hierarchyLabel = data => data && entityLabel(', ',
   hierarchyLabel(data.parent),
   data.name)
 
-export const HierarchySelect = props =>
+export const HierarchySelect = ({ name, ...rest }) =>
   <AsyncSelect searchFn={query => listHierarchies({ parent: query })}
                getOptionValue={option => option.id}
                getOptionLabel={hierarchyLabel}
-               {...props}/>
-
-export const HierarchySearchSelect = ({ name, ...rest }) =>
-  <HierarchySelect
-    restoredValue={useRestored(name + 'Id', useHierarchy)}
-    name={name}
-    {...rest}/>
+               restoredValue={useRestored(name + 'Id', useHierarchy)}
+               name={name}
+               {...rest}/>

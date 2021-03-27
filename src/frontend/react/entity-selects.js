@@ -81,17 +81,13 @@ import { entityLabel, useRestored } from '../../shared/utils'
   const content = `${imports}
 export const ${codeLower(entityCode)}Label = data => data && entityLabel(${labelValues})
 
-export const ${entityCode}Select = props =>
+export const ${entityCode}Select = ({ name, ...rest }) =>
   <AsyncSelect searchFn={query => list${codePlural(entityCode)}({ ${labelAttributeCode}: query })}
                getOptionValue={option => option.id}
                getOptionLabel={${codeLower(entityCode)}Label}
-               {...props}/>
-
-export const ${entityCode}SearchSelect = ({ name, ...rest }) =>
-  <${entityCode}Select
-    restoredValue={useRestored(name + '${codeUpper(primaryKey(meta, entityCode)[0])}', use${entityCode})}
-    name={name}
-    {...rest}/>
+               restoredValue={useRestored(name + '${codeUpper(primaryKey(meta, entityCode)[0])}', use${entityCode})}
+               name={name}
+               {...rest}/>
 `
 
   const dir = path.join(targetDir, 'frontend', 'src', 'app', pkg(entityCode))

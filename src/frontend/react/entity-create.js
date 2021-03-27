@@ -15,7 +15,7 @@ const {
   hasDate,
   hasDateTime
 } = require('../../meta/entity')
-const { pkg, url, label, labelLower, codeUpper } = require('./shared')
+const { pkg, url, label, labelLower, codeLower, codeUpper } = require('./shared')
 
 const generateCreate = (meta, targetDir, entityCode) => {
   const attributeEntries =
@@ -119,7 +119,7 @@ import * as Yup from 'yup'
     .map(([attributeCode]) => `${entityCode}${codeUpper(attributeCode)}Select`)
     .map(name => `import ${name} from './${name}'\n`)
     .join('')
-  imports += `import { create${entityCode} } from './${pkg(entityCode)}-api'\n`
+  imports += `import { create${entityCode}, ${codeLower(entityCode)}FromApi } from './${pkg(entityCode)}-api'\n`
 
   const content = `${imports}
 export default () =>
@@ -128,6 +128,7 @@ export default () =>
     entityTitle="${label(entityCode)}"
     url="/${url(entityCode)}"
     rows={${fields.length}}
+    fromApi={${codeLower(entityCode)}FromApi}
     initialValues={{${initialValues}
     }}
     validationSchema={

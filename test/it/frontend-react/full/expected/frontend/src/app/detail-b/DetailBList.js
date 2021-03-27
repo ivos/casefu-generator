@@ -1,8 +1,8 @@
 import React from 'react'
 import { Form } from 'react-bootstrap'
 import { CreateButton, FieldGroup, ListScreen } from '../../shared'
-import { masterALabel, MasterASearchSelect } from '../master-a/MasterASelects'
-import { masterBLabel, MasterBSearchSelect } from '../master-b/MasterBSelects'
+import { masterALabel, MasterASelect } from '../master-a/MasterASelects'
+import { masterBLabel, MasterBSelect } from '../master-b/MasterBSelects'
 import { detailBFromApi, detailBToApi, useDetailBs } from './detail-b-api'
 
 let searchValuesCache = {
@@ -21,7 +21,8 @@ export default () =>
     title={
       <>
         Detail bs
-        <CreateButton to="/detail-bs/new" title="Create new detail b..."/>
+        <CreateButton to="/detail-bs/new" title="Create new detail b..."
+                      initialValues={detailBToApi(searchValuesCache)}/>
       </>
     }
     url="/detail-bs"
@@ -33,10 +34,10 @@ export default () =>
       <>
         <FieldGroup as={Form.Control} name="id" label="Id" sm={[2, 9]} isValid={false}/>
         <FieldGroup as={Form.Control} name="name" label="Name" sm={[2, 9]} isValid={false}/>
-        <FieldGroup as={MasterASearchSelect} name="masterA1" label="Master a1" sm={[2, 9]} isValid={false}/>
-        <FieldGroup as={MasterASearchSelect} name="masterA2" label="Master a2" sm={[2, 9]} isValid={false}/>
-        <FieldGroup as={MasterBSearchSelect} name="masterB1" label="Master b1" sm={[2, 9]} isValid={false}/>
-        <FieldGroup as={MasterBSearchSelect} name="masterB2" label="Master b2" sm={[2, 9]} isValid={false}/>
+        <FieldGroup as={MasterASelect} name="masterA1" label="Master a1" sm={[2, 9]} isValid={false}/>
+        <FieldGroup as={MasterASelect} name="masterA2" label="Master a2" sm={[2, 9]} isValid={false}/>
+        <FieldGroup as={MasterBSelect} name="masterB1" label="Master b1" sm={[2, 9]} isValid={false}/>
+        <FieldGroup as={MasterBSelect} name="masterB2" label="Master b2" sm={[2, 9]} isValid={false}/>
       </>
     }
     columns={6}

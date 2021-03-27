@@ -22,7 +22,8 @@ export default () =>
     title={
       <>
         People
-        <CreateButton to="/people/new" title="Create new person..."/>
+        <CreateButton to="/people/new" title="Create new person..."
+                      initialValues={personToApi(searchValuesCache)}/>
       </>
     }
     url="/people"

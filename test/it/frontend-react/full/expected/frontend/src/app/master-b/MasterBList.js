@@ -15,7 +15,8 @@ export default () =>
     title={
       <>
         Master bs
-        <CreateButton to="/master-bs/new" title="Create new master b..."/>
+        <CreateButton to="/master-bs/new" title="Create new master b..."
+                      initialValues={masterBToApi(searchValuesCache)}/>
       </>
     }
     url="/master-bs"

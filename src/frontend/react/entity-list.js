@@ -81,7 +81,7 @@ const generateList = (meta, targetDir, entityCode) => {
         let control = 'Form.Control'
         if (isToOne(attributeEntry)) {
           const referredEntityCode = extractEntityCodeFromRef(dataType)
-          control = `${referredEntityCode}SearchSelect`
+          control = `${referredEntityCode}Select`
         }
         if (isEnum(attributeEntry)) {
           control = `${entityCode}${codeUpper(attributeCode)}Select`
@@ -119,7 +119,7 @@ import { Form } from 'react-bootstrap'
     .filter(distinct)
     .map(dataType => {
       const referredEntityCode = extractEntityCodeFromRef(dataType)
-      return `import { ${codeLower(referredEntityCode)}Label, ${referredEntityCode}SearchSelect }` +
+      return `import { ${codeLower(referredEntityCode)}Label, ${referredEntityCode}Select }` +
         ` from '../${pkg(referredEntityCode)}/${referredEntityCode}Selects'\n`
     })
     .join('')
@@ -153,7 +153,8 @@ export default () =>
     title={
       <>
         ${labelPlural(entityCode)}
-        <CreateButton to="/${url(entityCode)}/new" title="Create new ${labelLower(entityCode)}..."/>
+        <CreateButton to="/${url(entityCode)}/new" title="Create new ${labelLower(entityCode)}..."
+                      initialValues={${codeLower(entityCode)}ToApi(searchValuesCache)}/>
       </>
     }
     url="/${url(entityCode)}"

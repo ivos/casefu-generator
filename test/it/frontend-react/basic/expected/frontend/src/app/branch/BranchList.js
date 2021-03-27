@@ -21,7 +21,8 @@ export default () =>
     title={
       <>
         Branches
-        <CreateButton to="/branches/new" title="Create new branch..."/>
+        <CreateButton to="/branches/new" title="Create new branch..."
+                      initialValues={branchToApi(searchValuesCache)}/>
       </>
     }
     url="/branches"

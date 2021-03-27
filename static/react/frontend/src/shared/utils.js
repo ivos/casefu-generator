@@ -60,7 +60,7 @@ export const restore = (entity, from, to, id) => {
   if (entity.hasOwnProperty(from)) {
     const result = { ...entity }
     const value = entity[from]
-    result[to] = { [id]: value }
+    result[to] = { [id]: Number(value) }
     delete result[from]
     return result
   }
@@ -93,10 +93,10 @@ export const useRestored = (urlParam, useGet) => {
   const { data } = useGet(id)
 
   useEffect(() => {
-    if (isRestoring) {
+    if (isRestoring && id != null) {
       setIsRestoring(false)
     }
-  }, [isRestoring, setIsRestoring])
+  }, [isRestoring, setIsRestoring, id])
 
   return isRestoring ? data : null
 }

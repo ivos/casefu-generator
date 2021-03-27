@@ -3,7 +3,7 @@ import { Form } from 'react-bootstrap'
 import * as Yup from 'yup'
 import { CreateScreen, FieldGroup } from '../../shared'
 import { HierarchySelect } from '../hierarchy/HierarchySelects'
-import { createHierarchy } from './hierarchy-api'
+import { createHierarchy, hierarchyFromApi } from './hierarchy-api'
 
 export default () =>
   <CreateScreen
@@ -11,6 +11,7 @@ export default () =>
     entityTitle="Hierarchy"
     url="/hierarchies"
     rows={2}
+    fromApi={hierarchyFromApi}
     initialValues={{
       parent: '',
       name: ''

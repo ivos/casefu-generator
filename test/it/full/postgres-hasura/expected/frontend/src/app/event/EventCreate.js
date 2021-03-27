@@ -4,7 +4,7 @@ import * as Yup from 'yup'
 import { CreateScreen, DateTimePicker, FieldGroup } from '../../shared'
 import { LocationSelect } from '../location/LocationSelects'
 import EventStatusSelect from './EventStatusSelect'
-import { createEvent } from './event-api'
+import { createEvent, eventFromApi } from './event-api'
 
 export default () =>
   <CreateScreen
@@ -12,6 +12,7 @@ export default () =>
     entityTitle="Event"
     url="/events"
     rows={3}
+    fromApi={eventFromApi}
     initialValues={{
       time: '',
       status: '',

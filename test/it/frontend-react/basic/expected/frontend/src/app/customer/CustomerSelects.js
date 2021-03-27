@@ -10,14 +10,10 @@ export const customerLabel = data => data && entityLabel(', ',
   countryLabel(data.country),
   sentenceCase(data.status || ''))
 
-export const CustomerSelect = props =>
+export const CustomerSelect = ({ name, ...rest }) =>
   <AsyncSelect searchFn={query => listCustomers({ name: query })}
                getOptionValue={option => option.id}
                getOptionLabel={customerLabel}
-               {...props}/>
-
-export const CustomerSearchSelect = ({ name, ...rest }) =>
-  <CustomerSelect
-    restoredValue={useRestored(name + 'Id', useCustomer)}
-    name={name}
-    {...rest}/>
+               restoredValue={useRestored(name + 'Id', useCustomer)}
+               name={name}
+               {...rest}/>

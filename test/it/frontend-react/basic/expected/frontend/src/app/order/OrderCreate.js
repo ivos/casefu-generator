@@ -3,7 +3,7 @@ import { Form } from 'react-bootstrap'
 import * as Yup from 'yup'
 import { CreateScreen, DatePicker, DateTimePicker, FieldGroup } from '../../shared'
 import { CustomerSelect } from '../customer/CustomerSelects'
-import { createOrder } from './order-api'
+import { createOrder, orderFromApi } from './order-api'
 
 export default () =>
   <CreateScreen
@@ -11,6 +11,7 @@ export default () =>
     entityTitle="Order"
     url="/orders"
     rows={5}
+    fromApi={orderFromApi}
     initialValues={{
       orderNumber: '',
       customer: '',

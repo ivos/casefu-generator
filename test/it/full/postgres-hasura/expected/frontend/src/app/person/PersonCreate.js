@@ -3,7 +3,7 @@ import { Form } from 'react-bootstrap'
 import * as Yup from 'yup'
 import { CreateScreen, FieldGroup } from '../../shared'
 import PersonSexSelect from './PersonSexSelect'
-import { createPerson } from './person-api'
+import { createPerson, personFromApi } from './person-api'
 
 export default () =>
   <CreateScreen
@@ -11,6 +11,7 @@ export default () =>
     entityTitle="Person"
     url="/people"
     rows={6}
+    fromApi={personFromApi}
     initialValues={{
       personalNumber: '',
       familyName: '',

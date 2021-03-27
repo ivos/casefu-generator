@@ -12,14 +12,10 @@ export const personLabel = data => data && entityLabel(', ',
   data.email,
   sentenceCase(data.sex || ''))
 
-export const PersonSelect = props =>
+export const PersonSelect = ({ name, ...rest }) =>
   <AsyncSelect searchFn={query => listPeople({ personalNumber: query })}
                getOptionValue={option => option.id}
                getOptionLabel={personLabel}
-               {...props}/>
-
-export const PersonSearchSelect = ({ name, ...rest }) =>
-  <PersonSelect
-    restoredValue={useRestored(name + 'Id', usePerson)}
-    name={name}
-    {...rest}/>
+               restoredValue={useRestored(name + 'Id', usePerson)}
+               name={name}
+               {...rest}/>

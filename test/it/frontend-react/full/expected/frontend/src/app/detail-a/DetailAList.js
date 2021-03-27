@@ -1,7 +1,7 @@
 import React from 'react'
 import { Form } from 'react-bootstrap'
 import { CreateButton, FieldGroup, ListScreen } from '../../shared'
-import { masterALabel, MasterASearchSelect } from '../master-a/MasterASelects'
+import { masterALabel, MasterASelect } from '../master-a/MasterASelects'
 import { detailAFromApi, detailAToApi, useDetailAs } from './detail-a-api'
 
 let searchValuesCache = {
@@ -18,7 +18,8 @@ export default () =>
     title={
       <>
         Detail as
-        <CreateButton to="/detail-as/new" title="Create new detail a..."/>
+        <CreateButton to="/detail-as/new" title="Create new detail a..."
+                      initialValues={detailAToApi(searchValuesCache)}/>
       </>
     }
     url="/detail-as"
@@ -31,7 +32,7 @@ export default () =>
         <FieldGroup as={Form.Control} name="id" label="Id" sm={[2, 9]} isValid={false}/>
         <FieldGroup as={Form.Control} name="code" label="Code" sm={[2, 9]} isValid={false}/>
         <FieldGroup as={Form.Control} name="name" label="Name" sm={[2, 9]} isValid={false}/>
-        <FieldGroup as={MasterASearchSelect} name="master" label="Master" sm={[2, 9]} isValid={false}/>
+        <FieldGroup as={MasterASelect} name="master" label="Master" sm={[2, 9]} isValid={false}/>
       </>
     }
     columns={4}

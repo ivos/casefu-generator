@@ -2,7 +2,7 @@ import React from 'react'
 import { Form } from 'react-bootstrap'
 import { sentenceCase } from 'change-case'
 import { CreateButton, DateRangePicker, DateTimeRangePicker, FieldGroup, ListScreen } from '../../shared'
-import { customerLabel, CustomerSearchSelect } from '../customer/CustomerSelects'
+import { customerLabel, CustomerSelect } from '../customer/CustomerSelects'
 import OrderStatusSelect from './OrderStatusSelect'
 import { orderFromApi, orderToApi, useOrders } from './order-api'
 import { formatDate, formatDateTime } from '../../i18n'
@@ -26,7 +26,8 @@ export default () =>
     title={
       <>
         Orders
-        <CreateButton to="/orders/new" title="Create new order..."/>
+        <CreateButton to="/orders/new" title="Create new order..."
+                      initialValues={orderToApi(searchValuesCache)}/>
       </>
     }
     url="/orders"
@@ -38,7 +39,7 @@ export default () =>
       <>
         <FieldGroup as={Form.Control} name="id" label="Id" sm={[2, 9]} isValid={false}/>
         <FieldGroup as={Form.Control} name="orderNumber" label="Order number" sm={[2, 9]} isValid={false}/>
-        <FieldGroup as={CustomerSearchSelect} name="customer" label="Customer" sm={[2, 9]} isValid={false}/>
+        <FieldGroup as={CustomerSelect} name="customer" label="Customer" sm={[2, 9]} isValid={false}/>
         <FieldGroup as={OrderStatusSelect} name="status" label="Status" sm={[2, 9]} isValid={false}/>
         <FieldGroup as={DateTimeRangePicker} name="received" label="Received" sm={[2, 9]} isValid={false}/>
         <FieldGroup as={DateRangePicker} name="deliveryDate" label="Delivery date" sm={[2, 9]} isValid={false}/>

@@ -4,7 +4,7 @@ import * as Yup from 'yup'
 import { CreateScreen, FieldGroup } from '../../shared'
 import { MasterASelect } from '../master-a/MasterASelects'
 import { MasterBSelect } from '../master-b/MasterBSelects'
-import { createLinkAB } from './link-ab-api'
+import { createLinkAB, linkAbFromApi } from './link-ab-api'
 
 export default () =>
   <CreateScreen
@@ -12,6 +12,7 @@ export default () =>
     entityTitle="Link ab"
     url="/link-abs"
     rows={2}
+    fromApi={linkAbFromApi}
     initialValues={{
       masterFirst: '',
       masterSecond: ''

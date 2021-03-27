@@ -2,7 +2,7 @@ import React from 'react'
 import { Form } from 'react-bootstrap'
 import * as Yup from 'yup'
 import { CreateScreen, FieldGroup } from '../../shared'
-import { createMasterB } from './master-b-api'
+import { createMasterB, masterBFromApi } from './master-b-api'
 
 export default () =>
   <CreateScreen
@@ -10,6 +10,7 @@ export default () =>
     entityTitle="Master b"
     url="/master-bs"
     rows={1}
+    fromApi={masterBFromApi}
     initialValues={{
       name: ''
     }}

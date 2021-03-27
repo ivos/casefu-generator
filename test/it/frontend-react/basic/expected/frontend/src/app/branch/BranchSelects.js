@@ -11,14 +11,10 @@ export const branchLabel = data => data && entityLabel(', ',
   sentenceCase(data.type || ''),
   data.note)
 
-export const BranchSelect = props =>
+export const BranchSelect = ({ name, ...rest }) =>
   <AsyncSelect searchFn={query => listBranches({ street: query })}
                getOptionValue={option => option.id}
                getOptionLabel={branchLabel}
-               {...props}/>
-
-export const BranchSearchSelect = ({ name, ...rest }) =>
-  <BranchSelect
-    restoredValue={useRestored(name + 'Id', useBranch)}
-    name={name}
-    {...rest}/>
+               restoredValue={useRestored(name + 'Id', useBranch)}
+               name={name}
+               {...rest}/>

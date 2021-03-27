@@ -14,14 +14,10 @@ export const orderLabel = data => data && entityLabel(', ',
   formatDate(data.deliveryDate),
   data.note)
 
-export const OrderSelect = props =>
+export const OrderSelect = ({ name, ...rest }) =>
   <AsyncSelect searchFn={query => listOrders({ orderNumber: query })}
                getOptionValue={option => option.id}
                getOptionLabel={orderLabel}
-               {...props}/>
-
-export const OrderSearchSelect = ({ name, ...rest }) =>
-  <OrderSelect
-    restoredValue={useRestored(name + 'Id', useOrder)}
-    name={name}
-    {...rest}/>
+               restoredValue={useRestored(name + 'Id', useOrder)}
+               name={name}
+               {...rest}/>

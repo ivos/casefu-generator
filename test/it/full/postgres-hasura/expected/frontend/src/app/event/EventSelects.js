@@ -11,14 +11,10 @@ export const eventLabel = data => data && entityLabel(', ',
   sentenceCase(data.status || ''),
   locationLabel(data.location))
 
-export const EventSelect = props =>
+export const EventSelect = ({ name, ...rest }) =>
   <AsyncSelect searchFn={query => listEvents({ time: query })}
                getOptionValue={option => option.id}
                getOptionLabel={eventLabel}
-               {...props}/>
-
-export const EventSearchSelect = ({ name, ...rest }) =>
-  <EventSelect
-    restoredValue={useRestored(name + 'Id', useEvent)}
-    name={name}
-    {...rest}/>
+               restoredValue={useRestored(name + 'Id', useEvent)}
+               name={name}
+               {...rest}/>

@@ -15,7 +15,8 @@ export default () =>
     title={
       <>
         Countries
-        <CreateButton to="/countries/new" title="Create new country..."/>
+        <CreateButton to="/countries/new" title="Create new country..."
+                      initialValues={countryToApi(searchValuesCache)}/>
       </>
     }
     url="/countries"

@@ -3,7 +3,7 @@ import { Form } from 'react-bootstrap'
 import * as Yup from 'yup'
 import { CreateScreen, FieldGroup } from '../../shared'
 import BranchTypeSelect from './BranchTypeSelect'
-import { createBranch } from './branch-api'
+import { createBranch, branchFromApi } from './branch-api'
 
 export default () =>
   <CreateScreen
@@ -11,6 +11,7 @@ export default () =>
     entityTitle="Branch"
     url="/branches"
     rows={5}
+    fromApi={branchFromApi}
     initialValues={{
       street: '',
       city: '',

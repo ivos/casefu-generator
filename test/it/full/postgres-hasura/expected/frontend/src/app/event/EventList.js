@@ -2,7 +2,7 @@ import React from 'react'
 import { Form } from 'react-bootstrap'
 import { sentenceCase } from 'change-case'
 import { CreateButton, DateTimeRangePicker, FieldGroup, ListScreen } from '../../shared'
-import { locationLabel, LocationSearchSelect } from '../location/LocationSelects'
+import { locationLabel, LocationSelect } from '../location/LocationSelects'
 import EventStatusSelect from './EventStatusSelect'
 import { eventFromApi, eventToApi, useEvents } from './event-api'
 import { formatDateTime } from '../../i18n'
@@ -22,7 +22,8 @@ export default () =>
     title={
       <>
         Events
-        <CreateButton to="/events/new" title="Create new event..."/>
+        <CreateButton to="/events/new" title="Create new event..."
+                      initialValues={eventToApi(searchValuesCache)}/>
       </>
     }
     url="/events"
@@ -35,7 +36,7 @@ export default () =>
         <FieldGroup as={Form.Control} name="id" label="Id" sm={[2, 9]} isValid={false}/>
         <FieldGroup as={DateTimeRangePicker} name="time" label="Time" sm={[2, 9]} isValid={false}/>
         <FieldGroup as={EventStatusSelect} name="status" label="Status" sm={[2, 9]} isValid={false}/>
-        <FieldGroup as={LocationSearchSelect} name="location" label="Location" sm={[2, 9]} isValid={false}/>
+        <FieldGroup as={LocationSelect} name="location" label="Location" sm={[2, 9]} isValid={false}/>
       </>
     }
     columns={4}

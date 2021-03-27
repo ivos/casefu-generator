@@ -3,7 +3,7 @@ import { Form } from 'react-bootstrap'
 import * as Yup from 'yup'
 import { CreateScreen, FieldGroup } from '../../shared'
 import { MasterASelect } from '../master-a/MasterASelects'
-import { createDetailA } from './detail-a-api'
+import { createDetailA, detailAFromApi } from './detail-a-api'
 
 export default () =>
   <CreateScreen
@@ -11,6 +11,7 @@ export default () =>
     entityTitle="Detail a"
     url="/detail-as"
     rows={3}
+    fromApi={detailAFromApi}
     initialValues={{
       code: '',
       name: '',

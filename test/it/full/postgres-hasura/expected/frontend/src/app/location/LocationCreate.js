@@ -2,7 +2,7 @@ import React from 'react'
 import { Form } from 'react-bootstrap'
 import * as Yup from 'yup'
 import { CreateScreen, FieldGroup } from '../../shared'
-import { createLocation } from './location-api'
+import { createLocation, locationFromApi } from './location-api'
 
 export default () =>
   <CreateScreen
@@ -10,6 +10,7 @@ export default () =>
     entityTitle="Location"
     url="/locations"
     rows={1}
+    fromApi={locationFromApi}
     initialValues={{
       name: ''
     }}
